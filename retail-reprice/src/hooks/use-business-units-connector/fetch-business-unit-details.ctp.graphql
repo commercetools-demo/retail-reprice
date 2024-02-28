@@ -1,0 +1,29 @@
+query FetchBusinessUnitDetails($businessUnitId: String!) {
+  businessUnit(id: $businessUnitId) {
+    id
+    version
+    key
+    stores {
+      id
+      key
+      nameAllLocales {
+        locale
+        value
+      }
+      countries {
+        code
+      }
+      productSelections {
+        productSelection {
+          key
+          nameAllLocales {
+            locale
+            value
+          }
+          productCount
+          mode
+        }
+      }
+    }
+  }
+}

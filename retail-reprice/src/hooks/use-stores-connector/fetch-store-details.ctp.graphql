@@ -1,0 +1,33 @@
+query FetchStoreDetails($storeId: String!) {
+  store(id: $storeId) {
+    id
+    version
+    key
+    languages
+    countries {
+      code
+    }
+    productSelections {
+      productSelection {
+        key
+        name
+        mode
+        id
+        productCount
+      }
+    }
+    distributionChannels {
+      id
+      key
+      roles
+      nameAllLocales {
+        locale
+        value
+      }
+    }
+    nameAllLocales {
+      locale
+      value
+    }
+  }
+}

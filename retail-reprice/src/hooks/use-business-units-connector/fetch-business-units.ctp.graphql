@@ -1,0 +1,19 @@
+query FetchBusinessUnits($limit: Int!, $offset: Int!, $sort: [String!]) {
+  businessUnits(limit: $limit, offset: $offset, sort: $sort) {
+    total
+    count
+    offset
+    results {
+      id
+      key
+      name
+      contactEmail
+      custom {
+        customFieldsRaw {
+          name
+          value
+        }
+      }
+    }
+  }
+}

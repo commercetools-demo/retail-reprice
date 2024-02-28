@@ -1,0 +1,34 @@
+query FetchStores($limit: Int!, $offset: Int!, $sort: [String!]) {
+  stores(limit: $limit, offset: $offset, sort: $sort) {
+    total
+    count
+    offset
+    results {
+      id
+      key
+      countries {
+        code
+      }
+      custom {
+        customFieldsRaw {
+          name
+          value
+        }
+      }
+      productSelections {
+        productSelection {
+          nameAllLocales {
+            locale
+            value
+          }
+          mode
+          
+        }
+      }
+      nameAllLocales {
+        locale
+        value
+      }
+    }
+  }
+}
