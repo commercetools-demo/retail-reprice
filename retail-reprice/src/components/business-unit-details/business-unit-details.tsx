@@ -3,6 +3,7 @@ import {
   Link as RouterLink,
   Switch,
   useHistory,
+  useParams,
   useRouteMatch,
 } from 'react-router-dom';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
@@ -22,10 +23,13 @@ import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
 import messages from './messages';
 import { getErrorMessage } from '../../helpers';
-import { useBusinessUnitsFetcher } from '../../hooks/use-business-units-connector';
+import {
+  useBusinessUnitDetailsFetcher,
+  useBusinessUnitsFetcher,
+} from '../../hooks/use-business-units-connector';
 import { TBusinessUnit } from '../../hooks/use-business-units-connector/types';
-import { SuspendedRoute } from '@commercetools-frontend/application-shell';
-import BusinessUnitDetails from '../business-unit-details';
+import { FormModalPage } from '@commercetools-frontend/application-components';
+import StoresTable from '../stores/store-table';
 
 const columns = [
   { key: 'name', label: 'Business unit name' },
@@ -33,13 +37,15 @@ const columns = [
   { key: 'roles', label: 'Roles' },
 ];
 
-type TBusinessUnitsProps = {
+type TBusinessUnitDetailsProps = {
   linkToWelcome: string;
 };
 
-const BusinessUnits = (props: TBusinessUnitsProps) => {
+const BusinessUnitDetails = (props: TBusinessUnitDetailsProps) => {
   const intl = useIntl();
   const match = useRouteMatch();
+  const params = useParams<{ id: string }>();
+
   const { push } = useHistory();
   const { page, perPage } = usePaginationState();
   const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
@@ -47,19 +53,9 @@ const BusinessUnits = (props: TBusinessUnitsProps) => {
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages,
   }));
-  const { businessUnitsPaginatedResult, error, loading } = useBusinessUnitsFetcher({
-    page,
-    perPage,
-    tableSorting,
-  });
-
-  if (error) {
-    return (
-      <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
-      </ContentNotification>
-    );
-  }
+  const { businessUnit, error, loading } = useBusinessUnitDetailsFetcher(
+    params.id
+  );
 
   return (
     <Spacings.Stack scale="xl">
@@ -72,49 +68,12 @@ const BusinessUnits = (props: TBusinessUnitsProps) => {
         />
         <Text.Headline as="h2" intlMessage={messages.title} />
       </Spacings.Stack>
-
-      <Constraints.Horizontal max={13}>
-        <ContentNotification type="info">
-          <Text.Body intlMessage={messages.demoHint} />
-        </ContentNotification>
-      </Constraints.Horizontal>
-
-      {loading && <LoadingSpinner />}
-
-      {businessUnitsPaginatedResult ? (
-        <Spacings.Stack scale="l">
-          <DataTable<NonNullable<TBusinessUnit>>
-            isCondensed
-            columns={columns}
-            rows={businessUnitsPaginatedResult.results}
-            itemRenderer={(item, column) => {
-              switch (column.key) {
-                case 'key':
-                  return item.key;
-                case 'name':
-                  return item.name;
-                default:
-                  return null;
-              }
-            }}
-            sortedBy={tableSorting.value.key}
-            sortDirection={tableSorting.value.order}
-            onSortChange={tableSorting.onChange}
-            onRowClick={(row) => push(`${match.url}/${row.id}`)}
-          />
-          <Pagination
-            page={page.value}
-            onPageChange={page.onChange}
-            perPage={perPage.value}
-            onPerPageChange={perPage.onChange}
-            totalItems={businessUnitsPaginatedResult.total}
-          />
-          
-        </Spacings.Stack>
-      ) : null}
+      <Spacings.Stack scale="xs">
+        <StoresTable items={businessUnit?.stores} />
+      </Spacings.Stack>
     </Spacings.Stack>
   );
 };
-BusinessUnits.displayName = 'BusinessUnits';
+BusinessUnitDetails.displayName = 'BusinessUnitDetails';
 
-export default BusinessUnits;
+export default BusinessUnitDetails;

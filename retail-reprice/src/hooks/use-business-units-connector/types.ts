@@ -7,15 +7,26 @@ export type TBusinessUnit = {
   name: string;
   key?: string;
   contactEmail?: string;
-  customFieldsRaw?: Maybe<Array<TRawCustomField>>
-}
+  custom: {
+    customFieldsRaw?: Maybe<Array<TRawCustomField>>;
+  };
+};
+export type TBusinessUnitDetail = {
+  id: string;
+  name: string;
+  key?: string;
+  custom: {
+    customFieldsRaw?: Maybe<Array<TRawCustomField>>;
+  };
+  stores?: TStore[];
+};
 
 type TBusinessUnitsQueryResult = {
   results: TBusinessUnit[];
   total: number;
   offset: number;
   count: number;
-}
+};
 
 export type TFetchBusinessUnitsQuery = {
   businessUnits: TBusinessUnitsQueryResult;

@@ -3,6 +3,13 @@ query FetchBusinessUnitDetails($businessUnitId: String!) {
     id
     version
     key
+    name
+    custom {
+      customFieldsRaw {
+        name
+        value
+      }
+    }
     stores {
       id
       key
@@ -12,6 +19,12 @@ query FetchBusinessUnitDetails($businessUnitId: String!) {
       }
       countries {
         code
+      }
+      custom {
+        customFieldsRaw {
+          name
+          value
+        }
       }
       productSelections {
         productSelection {

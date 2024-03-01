@@ -5,6 +5,7 @@ import Channels from './components/channels';
 import Welcome from './components/welcome';
 import Stores from './components/stores';
 import BusinessUnits from './components/business-units';
+import BusinessUnitDetails from './components/business-unit-details';
 
 type ApplicationRoutesProps = {
   children?: ReactNode;
@@ -32,9 +33,13 @@ const ApplicationRoutes = (_props: ApplicationRoutesProps) => {
         <Route path={`${match.path}/stores`}>
           <Stores linkToWelcome={match.url} />
         </Route>
+        <Route path={`${match.path}/business-units/:id`}>
+          <BusinessUnitDetails linkToWelcome={match.url} />
+        </Route>
         <Route path={`${match.path}/business-units`}>
           <BusinessUnits linkToWelcome={match.url} />
         </Route>
+
         <Route>
           <Welcome />
         </Route>

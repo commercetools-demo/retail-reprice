@@ -13,6 +13,7 @@ import {
   TFetchBusinessUnitsQuery,
   TFetchBusinessUnitsQueryVariables,
   TBusinessUnit,
+  TBusinessUnitDetail,
 } from './types';
 
 export const useBusinessUnitsFetcher: TUseBusinessUnitsFetcher = ({
@@ -42,7 +43,7 @@ export const useBusinessUnitsFetcher: TUseBusinessUnitsFetcher = ({
 };
 
 type TUseBusinessUnitDetailsFetcher = (businessUnitId: string) => {
-  businessUnit?: TBusinessUnit;
+  businessUnit?: TBusinessUnitDetail;
   error?: ApolloError;
   loading: boolean;
 };
