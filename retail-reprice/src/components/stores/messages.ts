@@ -18,4 +18,8 @@ export default defineMessages({
     id: 'stores.noResults',
     defaultMessage: 'There are no stores available in this project.',
   },
+  addTag: {
+    id: 'stores.addTag',
+    defaultMessage: 'Add a tag.',
+  },
 });

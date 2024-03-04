@@ -11,15 +11,12 @@ import { Pagination } from '@commercetools-uikit/pagination';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
 import { useIntl } from 'react-intl';
-import {
-  Link as RouterLink,
-} from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { getErrorMessage } from '../../helpers';
 import { useStoresFetcher } from '../../hooks/use-stores-connector';
 import messages from './messages';
 import StoresTable from './store-table';
-
-
+import TagsProvider from '../../providers/tags/tags';
 
 type TStoresProps = {
   linkToWelcome: string;
@@ -67,19 +64,24 @@ const Stores = (props: TStoresProps) => {
 
       {storesPaginatedResult ? (
         <Spacings.Stack scale="l">
-          <StoresTable items={storesPaginatedResult.results} tableSorting={tableSorting} />
-          <Pagination
-            page={page.value}
-            onPageChange={page.onChange}
-            perPage={perPage.value}
-            onPerPageChange={perPage.onChange}
-            totalItems={storesPaginatedResult.total}
-          />
-          {/* <Switch>
+          <TagsProvider>
+            <StoresTable
+              items={storesPaginatedResult.results}
+              tableSorting={tableSorting}
+            />
+            <Pagination
+              page={page.value}
+              onPageChange={page.onChange}
+              perPage={perPage.value}
+              onPerPageChange={perPage.onChange}
+              totalItems={storesPaginatedResult.total}
+            />
+            {/* <Switch>
             <SuspendedRoute path={`${match.url}/:id`}>
               <ChannelDetails onClose={() => push(`${match.url}`)} />
             </SuspendedRoute>
           </Switch> */}
+          </TagsProvider>
         </Spacings.Stack>
       ) : null}
     </Spacings.Stack>

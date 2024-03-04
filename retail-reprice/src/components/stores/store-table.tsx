@@ -8,6 +8,19 @@ import DataTable from '@commercetools-uikit/data-table';
 import { TDataTableSortingState } from '@commercetools-uikit/hooks';
 import { useHistory, useRouteMatch } from 'react-router';
 import { TStore } from '../../types/generated/ctp';
+import {
+  useCustomObjectFetcher,
+  useCustomObjectUpdater,
+} from '../../hooks/use-custom-object-connector/use-custom-object-connector';
+import { Tag, TagList } from '@commercetools-uikit/tag';
+import { useIntl } from 'react-intl';
+import messages from './messages';
+import NewTag from '../tags/new-tag';
+import Spacings from '@commercetools-uikit/spacings';
+import styles from './store-table.module.css';
+import { useTags } from '../../hooks/use-custom-object-connector';
+import { useEffect } from 'react';
+import { useTagsContext } from '../../providers/tags/tags';
 type Props = {
   items?: TStore[];
   tableSorting?: TDataTableSortingState;
@@ -15,15 +28,38 @@ type Props = {
 const columns = [
   { key: 'name', label: 'Store name' },
   { key: 'key', label: 'Store key', isSortable: true },
-  { key: 'roles', label: 'Roles' },
+  { key: 'tags', label: 'Tags' },
 ];
+
 const StoresTable = (props: Props) => {
+  const { formatMessage } = useIntl();
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages,
   }));
   const { push } = useHistory();
   const match = useRouteMatch();
+
+  const { customObject, addTag, removeTag, loading } = useTagsContext();
+
+  const { getTagsForStore } = useTags();
+
+  const renderTags = (id: string) => {
+    const tags = getTagsForStore(id, customObject);
+    return (
+      <Spacings.Inline justifyContent="flex-start">
+        <TagList className={styles.tagList}>
+          {tags &&
+            tags.map((tag, index) => (
+              <Tag key={index} onRemove={() => removeTag(tag, id)}>
+                {tag}
+              </Tag>
+            ))}
+        </TagList>
+        <NewTag onAdd={(key) => addTag(key, id)} />
+      </Spacings.Inline>
+    );
+  };
 
   return (
     <DataTable<TStore>
@@ -48,6 +84,8 @@ const StoresTable = (props: Props) => {
                 fallback: NO_VALUE_FALLBACK,
               }
             );
+          case 'tags':
+            return loading ? 'Loading...' : renderTags(item.id);
           default:
             return null;
         }

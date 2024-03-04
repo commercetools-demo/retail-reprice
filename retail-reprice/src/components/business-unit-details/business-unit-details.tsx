@@ -30,6 +30,7 @@ import {
 import { TBusinessUnit } from '../../hooks/use-business-units-connector/types';
 import { FormModalPage } from '@commercetools-frontend/application-components';
 import StoresTable from '../stores/store-table';
+import TagsProvider from '../../providers/tags/tags';
 
 const columns = [
   { key: 'name', label: 'Business unit name' },
@@ -69,7 +70,9 @@ const BusinessUnitDetails = (props: TBusinessUnitDetailsProps) => {
         <Text.Headline as="h2" intlMessage={messages.title} />
       </Spacings.Stack>
       <Spacings.Stack scale="xs">
-        <StoresTable items={businessUnit?.stores} />
+        <TagsProvider>
+          <StoresTable items={businessUnit?.stores} />
+        </TagsProvider>
       </Spacings.Stack>
     </Spacings.Stack>
   );
