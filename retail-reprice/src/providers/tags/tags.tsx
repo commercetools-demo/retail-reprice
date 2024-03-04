@@ -1,5 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useCustomObjectFetcher, useCustomObjectUpdater } from '../../hooks/use-custom-object-connector';
+import {
+  useCustomObjectFetcher,
+  useCustomObjectUpdater,
+} from '../../hooks/use-custom-object-connector';
 
 export const CUSTOM_OBJECT_KEY = 'storesToTags';
 export const CUSTOM_OBJECT_CONTAINER = 'retail-reprice';
@@ -27,46 +30,40 @@ const TagsProvider = ({ children }: React.PropsWithChildren<{}>) => {
   });
   const { execute } = useCustomObjectUpdater();
 
-
   const [customObject, setCustomObject] = useState<any>();
 
   const addTag = async (tag: string, storeId: string) => {
-      const result = await execute({
-        draft: {
-          container: CUSTOM_OBJECT_CONTAINER,
-          key: CUSTOM_OBJECT_KEY,
-          value: JSON.stringify({
-            ...customObject,
-            [tag]: {
-              ...customObject?.[tag],
-              stores: [
-                ...(customObject?.[tag]?.stores || []),
-                storeId,
-              ],
-            },
-          }),
-        },
-      });
-      if (!result.errors) {
-          return result;
-      }
+    const result = await execute({
+      draft: {
+        container: CUSTOM_OBJECT_CONTAINER,
+        key: CUSTOM_OBJECT_KEY,
+        value: JSON.stringify({
+          ...customObject,
+          [tag]: {
+            ...customObject?.[tag],
+            stores: [...(customObject?.[tag]?.stores || []), storeId],
+          },
+        }),
+      },
+    });
+    if (!result.errors) {
+      return result;
+    }
   };
   const removeTag = async (tag: string, storeId: string) => {
-      return execute({
-        draft: {
-          container: CUSTOM_OBJECT_CONTAINER,
-          key: CUSTOM_OBJECT_KEY,
-          value: JSON.stringify({
-            ...customObject,
-            [tag]: {
-              ...customObject?.[tag],
-              stores: customObject?.[tag].stores.filter(
-                (id) => id !== storeId
-              ),
-            },
-          }),
-        },
-      });
+    return execute({
+      draft: {
+        container: CUSTOM_OBJECT_CONTAINER,
+        key: CUSTOM_OBJECT_KEY,
+        value: JSON.stringify({
+          ...customObject,
+          [tag]: {
+            ...customObject?.[tag],
+            stores: customObject?.[tag].stores.filter((id) => id !== storeId),
+          },
+        }),
+      },
+    });
   };
 
   useEffect(() => {
@@ -74,9 +71,7 @@ const TagsProvider = ({ children }: React.PropsWithChildren<{}>) => {
   }, [customObjectData, loading]);
 
   return (
-    <TagsContext.Provider
-      value={{ customObject, loading, addTag, removeTag }}
-    >
+    <TagsContext.Provider value={{ customObject, loading, addTag, removeTag }}>
       {children}
     </TagsContext.Provider>
   );

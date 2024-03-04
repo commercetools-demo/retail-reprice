@@ -47,11 +47,12 @@ const BusinessUnits = (props: TBusinessUnitsProps) => {
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages,
   }));
-  const { businessUnitsPaginatedResult, error, loading } = useBusinessUnitsFetcher({
-    page,
-    perPage,
-    tableSorting,
-  });
+  const { businessUnitsPaginatedResult, error, loading } =
+    useBusinessUnitsFetcher({
+      page,
+      perPage,
+      tableSorting,
+    });
 
   if (error) {
     return (
@@ -109,7 +110,6 @@ const BusinessUnits = (props: TBusinessUnitsProps) => {
             onPerPageChange={perPage.onChange}
             totalItems={businessUnitsPaginatedResult.total}
           />
-          
         </Spacings.Stack>
       ) : null}
     </Spacings.Stack>

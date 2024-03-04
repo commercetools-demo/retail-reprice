@@ -16,6 +16,7 @@ export default defineMessages({
   },
   noResults: {
     id: 'businessUnitDetails.noResults',
-    defaultMessage: 'There are no businessUnitDetails available in this project.',
+    defaultMessage:
+      'There are no businessUnitDetails available in this project.',
   },
 });

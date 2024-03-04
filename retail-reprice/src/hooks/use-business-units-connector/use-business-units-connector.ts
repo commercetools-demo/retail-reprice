@@ -48,7 +48,9 @@ type TUseBusinessUnitDetailsFetcher = (businessUnitId: string) => {
   loading: boolean;
 };
 
-export const useBusinessUnitDetailsFetcher: TUseBusinessUnitDetailsFetcher = (businessUnitId) => {
+export const useBusinessUnitDetailsFetcher: TUseBusinessUnitDetailsFetcher = (
+  businessUnitId
+) => {
   const { data, error, loading } = useMcQuery<
     TFetchBusinessUnitDetailsQuery,
     TFetchBusinessUnitDetailsQueryVariables
