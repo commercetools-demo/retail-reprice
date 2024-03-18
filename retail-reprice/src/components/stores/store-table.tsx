@@ -8,22 +8,17 @@ import DataTable from '@commercetools-uikit/data-table';
 import { TDataTableSortingState } from '@commercetools-uikit/hooks';
 import { useHistory, useRouteMatch } from 'react-router';
 import { TStore } from '../../types/generated/ctp';
-import {
-  useCustomObjectFetcher,
-  useCustomObjectUpdater,
-} from '../../hooks/use-custom-object-connector/use-custom-object-connector';
 import { Tag, TagList } from '@commercetools-uikit/tag';
 import { useIntl } from 'react-intl';
-import messages from './messages';
 import NewTag from '../tags/new-tag';
 import Spacings from '@commercetools-uikit/spacings';
 import styles from './store-table.module.css';
 import { useTags } from '../../hooks/use-custom-object-connector';
-import { useEffect } from 'react';
 import { useTagsContext } from '../../providers/tags/tags';
 type Props = {
   items?: TStore[];
   tableSorting?: TDataTableSortingState;
+  redirectUrl?: string;
 };
 const columns = [
   { key: 'name', label: 'Store name' },
@@ -32,7 +27,6 @@ const columns = [
 ];
 
 const StoresTable = (props: Props) => {
-  const { formatMessage } = useIntl();
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages,
@@ -97,7 +91,13 @@ const StoresTable = (props: Props) => {
       onSortChange={
         props?.tableSorting ? props.tableSorting.onChange : undefined
       }
-      onRowClick={(row) => push(`${match.url}/${row.id}`)}
+      onRowClick={(row) =>
+        push(
+          `${match.url}/${
+            props.redirectUrl ? `${props.redirectUrl}/${row.id}` : row.id
+          }`
+        )
+      }
     />
   );
 };

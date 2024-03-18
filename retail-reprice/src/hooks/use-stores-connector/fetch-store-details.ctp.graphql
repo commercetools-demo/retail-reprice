@@ -10,7 +10,10 @@ query FetchStoreDetails($storeId: String!) {
     productSelections {
       productSelection {
         key
-        name
+        nameAllLocales {
+          locale
+          value
+        }
         mode
         id
         productCount

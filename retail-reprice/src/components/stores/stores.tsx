@@ -68,6 +68,7 @@ const Stores = (props: TStoresProps) => {
             <StoresTable
               items={storesPaginatedResult.results}
               tableSorting={tableSorting}
+              redirectUrl=''
             />
             <Pagination
               page={page.value}

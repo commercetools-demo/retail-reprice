@@ -42,7 +42,7 @@ export const useStoresFetcher: TUseStoresFetcher = ({
 };
 
 type TUseStoreDetailsFetcher = (storeId: string) => {
-  channel?: TStore;
+  store?: TStore;
   error?: ApolloError;
   loading: boolean;
 };
