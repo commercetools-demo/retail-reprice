@@ -25,6 +25,7 @@ export interface Query {
   currency?: string;
   productSelections?: string[];
   distributionChannels?: string[];
+  noAnyChannelPrice?: boolean;
 }
 
 function buildUrlWithParams(
@@ -51,7 +52,10 @@ const getPrice = (
   requestQuery: Query,
   price: TProductProjection['masterVariant']['price']
 ) => {
-  if (!requestQuery.distributionChannels?.length) {
+  if (
+    !requestQuery.distributionChannels?.length ||
+    !requestQuery.noAnyChannelPrice
+  ) {
     return price;
   }
   return requestQuery.distributionChannels.includes(price?.channel?.id || '')
@@ -68,7 +72,6 @@ export const UseProducts = () => {
     page: number
   ): Promise<Result> => {
     const offset = (page - 1) * limit;
-    console.log('requestQuery', requestQuery);
 
     const projection = projectionBuilder(requestQuery, context.dataLocale);
     const query = requestBuilder(requestQuery);
@@ -95,8 +98,10 @@ export const UseProducts = () => {
           ...hit.productProjection,
           masterVariant: {
             ...hit.productProjection.masterVariant,
-            // price: getPrice(requestQuery,hit.productProjection.masterVariant.price),
-            price: hit.productProjection.masterVariant.price,
+            price: getPrice(
+              requestQuery,
+              hit.productProjection.masterVariant.price
+            ),
           },
         },
       })),

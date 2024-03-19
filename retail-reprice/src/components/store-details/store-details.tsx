@@ -30,7 +30,7 @@ const StoreDetails = (props: TStoreDetailsProps) => {
   const { getProducts } = UseProducts();
 
   const [result, setResult] = useState<Result>();
-  const [areFiltersDisplayed, setAreFiltersDisplayed] = useState(false);
+  const [areFiltersDisplayed, setAreFiltersDisplayed] = useState(true);
   const [filters, setFilters] = useState<Query>({
     storeId: params.storeId,
   });

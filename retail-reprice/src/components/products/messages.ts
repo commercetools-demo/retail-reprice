@@ -17,6 +17,10 @@ export default defineMessages({
     id: 'filters.priceChannel',
     defaultMessage: "Use store's distribution channels",
   },
+  noAny: {
+    id: 'filters.noAny',
+    defaultMessage: 'Do not show "no channel" prices',
+  },
   title: {
     id: 'filters.title',
     defaultMessage: 'Filter products',

@@ -6,15 +6,14 @@ import {
 } from '@commercetools-frontend/l10n';
 import DataTable from '@commercetools-uikit/data-table';
 import { TDataTableSortingState } from '@commercetools-uikit/hooks';
-import { useHistory, useRouteMatch } from 'react-router';
-import { TStore } from '../../types/generated/ctp';
-import { Tag, TagList } from '@commercetools-uikit/tag';
-import { useIntl } from 'react-intl';
-import NewTag from '../tags/new-tag';
 import Spacings from '@commercetools-uikit/spacings';
-import styles from './store-table.module.css';
+import { Tag, TagList } from '@commercetools-uikit/tag';
+import { useHistory, useRouteMatch } from 'react-router';
 import { useTags } from '../../hooks/use-custom-object-connector';
 import { useTagsContext } from '../../providers/tags/tags';
+import { TStore } from '../../types/generated/ctp';
+import NewTag from '../tags/new-tag';
+import styles from './store-table.module.css';
 type Props = {
   items?: TStore[];
   tableSorting?: TDataTableSortingState;

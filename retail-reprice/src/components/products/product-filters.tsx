@@ -30,6 +30,7 @@ const ProductFilters: React.FC<Props> = ({ onUpdateFilters, storeId }) => {
   const [filters, setFilters] = useState({
     productSelection: false,
     priceChannel: true,
+    noAnyChannelPrice: false,
     country: '',
     currency: '',
   });
@@ -48,6 +49,7 @@ const ProductFilters: React.FC<Props> = ({ onUpdateFilters, storeId }) => {
         : [],
       country: filters.country,
       currency: filters.currency,
+      noAnyChannelPrice: filters.noAnyChannelPrice,
     });
   }, [filters, store]);
 
@@ -133,6 +135,22 @@ const ProductFilters: React.FC<Props> = ({ onUpdateFilters, storeId }) => {
                   setFilters({
                     ...filters,
                     priceChannel: !filters.priceChannel,
+                  })
+                }
+              />
+            </Spacings.Inline>
+          </Constraints.Horizontal>
+          <Constraints.Horizontal max={16}>
+            <Spacings.Inline>
+              <FieldLabel title={formatMessage(messages.noAny)} />
+              <ToggleInput
+                size="small"
+                isChecked={filters.noAnyChannelPrice}
+                isDisabled={store?.distributionChannels.length === 0}
+                onChange={() =>
+                  setFilters({
+                    ...filters,
+                    noAnyChannelPrice: !filters.noAnyChannelPrice,
                   })
                 }
               />

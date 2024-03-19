@@ -1,42 +1,13 @@
-import { useIntl } from 'react-intl';
-import {
-  Link as RouterLink,
-  Switch,
-  useHistory,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
-import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
-import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
-import {
-  usePaginationState,
-  useDataTableSortingState,
-} from '@commercetools-uikit/hooks';
-import { BackIcon } from '@commercetools-uikit/icons';
-import Constraints from '@commercetools-uikit/constraints';
 import FlatButton from '@commercetools-uikit/flat-button';
-import LoadingSpinner from '@commercetools-uikit/loading-spinner';
-import DataTable from '@commercetools-uikit/data-table';
-import { ContentNotification } from '@commercetools-uikit/notifications';
-import { Pagination } from '@commercetools-uikit/pagination';
+import { BackIcon } from '@commercetools-uikit/icons';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
-import messages from './messages';
-import { getErrorMessage } from '../../helpers';
-import {
-  useBusinessUnitDetailsFetcher,
-  useBusinessUnitsFetcher,
-} from '../../hooks/use-business-units-connector';
-import { TBusinessUnit } from '../../hooks/use-business-units-connector/types';
-import { FormModalPage } from '@commercetools-frontend/application-components';
-import StoresTable from '../stores/store-table';
+import { useIntl } from 'react-intl';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useBusinessUnitDetailsFetcher } from '../../hooks/use-business-units-connector';
 import TagsProvider from '../../providers/tags/tags';
-
-const columns = [
-  { key: 'name', label: 'Business unit name' },
-  { key: 'key', label: 'Business key', isSortable: true },
-  { key: 'roles', label: 'Roles' },
-];
+import StoresTable from '../stores/store-table';
+import messages from './messages';
 
 type TBusinessUnitDetailsProps = {
   linkToWelcome: string;
@@ -44,19 +15,9 @@ type TBusinessUnitDetailsProps = {
 
 const BusinessUnitDetails = (props: TBusinessUnitDetailsProps) => {
   const intl = useIntl();
-  const match = useRouteMatch();
   const params = useParams<{ id: string }>();
 
-  const { push } = useHistory();
-  const { page, perPage } = usePaginationState();
-  const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
-  const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
-    dataLocale: context.dataLocale,
-    projectLanguages: context.project?.languages,
-  }));
-  const { businessUnit, error, loading } = useBusinessUnitDetailsFetcher(
-    params.id
-  );
+  const { businessUnit } = useBusinessUnitDetailsFetcher(params.id);
 
   return (
     <Spacings.Stack scale="xl">

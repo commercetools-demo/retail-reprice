@@ -1,31 +1,26 @@
-import { useIntl } from 'react-intl';
+import Constraints from '@commercetools-uikit/constraints';
+import DataTable from '@commercetools-uikit/data-table';
+import FlatButton from '@commercetools-uikit/flat-button';
 import {
-  Link as RouterLink,
-  Switch,
-  useHistory,
-  useRouteMatch,
-} from 'react-router-dom';
-import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
-import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
-import {
-  usePaginationState,
   useDataTableSortingState,
+  usePaginationState,
 } from '@commercetools-uikit/hooks';
 import { BackIcon } from '@commercetools-uikit/icons';
-import Constraints from '@commercetools-uikit/constraints';
-import FlatButton from '@commercetools-uikit/flat-button';
 import LoadingSpinner from '@commercetools-uikit/loading-spinner';
-import DataTable from '@commercetools-uikit/data-table';
 import { ContentNotification } from '@commercetools-uikit/notifications';
 import { Pagination } from '@commercetools-uikit/pagination';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
-import messages from './messages';
+import { useIntl } from 'react-intl';
+import {
+  Link as RouterLink,
+  useHistory,
+  useRouteMatch,
+} from 'react-router-dom';
 import { getErrorMessage } from '../../helpers';
 import { useBusinessUnitsFetcher } from '../../hooks/use-business-units-connector';
 import { TBusinessUnit } from '../../hooks/use-business-units-connector/types';
-import { SuspendedRoute } from '@commercetools-frontend/application-shell';
-import BusinessUnitDetails from '../business-unit-details';
+import messages from './messages';
 
 const columns = [
   { key: 'name', label: 'Business unit name' },
@@ -43,10 +38,7 @@ const BusinessUnits = (props: TBusinessUnitsProps) => {
   const { push } = useHistory();
   const { page, perPage } = usePaginationState();
   const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
-  const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
-    dataLocale: context.dataLocale,
-    projectLanguages: context.project?.languages,
-  }));
+
   const { businessUnitsPaginatedResult, error, loading } =
     useBusinessUnitsFetcher({
       page,
