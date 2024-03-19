@@ -7,9 +7,12 @@ import ToggleInput from '@commercetools-uikit/toggle-input';
 import FieldLabel from '@commercetools-uikit/field-label';
 import SpacingsInset from '@commercetools-uikit/spacings-inset';
 import Text from '@commercetools-uikit/text';
+import SelectInput from '@commercetools-uikit/select-input';
+import Constraints from '@commercetools-uikit/constraints';
 
 import messages from './messages';
 import { useIntl } from 'react-intl';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 type Props = {
   result?: Result;
   storeId: string;
@@ -17,46 +20,125 @@ type Props = {
 };
 
 const ProductFilters: React.FC<Props> = ({ onUpdateFilters, storeId }) => {
+  const { project } = useApplicationContext((context) => ({
+    project: context.project,
+  }));
   const { loading, store } = useStoreDetailsFetcher(storeId);
-  console.log(store);
-  
+
   const [data, setData] = useState<Omit<Query, 'storeId'>>({});
   const { formatMessage } = useIntl();
-  const [isProductSelectionsActive, setIsProductSelectionsActive] =
-    useState(false);
+  const [filters, setFilters] = useState({
+    productSelection: false,
+    priceChannel: true,
+    country: '',
+    currency: '',
+  });
+
   useEffect(() => {
-    
-    if (store?.productSelections.length) {
-       
-      setData({
-        ...data,
-        productSelections: isProductSelectionsActive ? store.productSelections.map(
-          (selection) => selection.productSelection?.id
-        ).filter(Boolean) as string[] : [],
-      });
-    }
-  }, [isProductSelectionsActive, store]);
+    setData({
+      ...data,
+      productSelections:
+        store?.productSelections.length && filters.productSelection
+          ? (store.productSelections
+              .map((selection) => selection.productSelection?.id)
+              .filter(Boolean) as string[])
+          : [],
+      distributionChannels: filters.priceChannel
+        ? store?.distributionChannels?.map((channel) => channel.id)
+        : [],
+      country: filters.country,
+      currency: filters.currency,
+    });
+  }, [filters, store]);
 
   useEffect(() => {
     onUpdateFilters(data);
   }, [data]);
 
+  useEffect(() => {
+    if (store) {
+      setData({
+        ...data,
+        storeKey: store.key,
+      });
+    }
+  }, [store]);
+
   if (loading) return <LoadingSpinner />;
   return (
     <SpacingsInset scale="l">
-      <Spacings.Stack scale="xs" alignItems="flex-start">
+      <Spacings.Stack scale="l">
         <Text.Headline as="h2">{formatMessage(messages.title)}</Text.Headline>
-        <Spacings.Inline>
-          <FieldLabel title={formatMessage(messages.productSelection)} />
-          <ToggleInput
-            size="small"
-            isChecked={isProductSelectionsActive}
-            isDisabled={store?.productSelections.length === 0}
-            onChange={() =>
-              setIsProductSelectionsActive(!isProductSelectionsActive)
-            }
-          />
-        </Spacings.Inline>
+        <Spacings.Stack scale="s" alignItems="stretch">
+          <Constraints.Horizontal max={16}>
+            <Spacings.Inline alignItems="stretch">
+              <FieldLabel title={formatMessage(messages.country)} />
+              <SelectInput
+                value={filters.country}
+                options={project?.countries.map((country) => ({
+                  label: country,
+                  value: country,
+                }))}
+                onChange={(value) =>
+                  setFilters({
+                    ...filters,
+                    country: value.target.value as string,
+                  })
+                }
+              />
+            </Spacings.Inline>
+          </Constraints.Horizontal>
+          <Constraints.Horizontal max={16}>
+            <Spacings.Inline>
+              <FieldLabel title={formatMessage(messages.currency)} />
+              <SelectInput
+                value={filters.currency}
+                options={project?.currencies.map((currency) => ({
+                  label: currency,
+                  value: currency,
+                }))}
+                onChange={(value) =>
+                  setFilters({
+                    ...filters,
+                    currency: value.target.value as string,
+                  })
+                }
+              />
+            </Spacings.Inline>
+          </Constraints.Horizontal>
+          <Constraints.Horizontal max={16}>
+            <Spacings.Inline>
+              <FieldLabel title={formatMessage(messages.productSelection)} />
+              <ToggleInput
+                size="small"
+                isChecked={filters.productSelection}
+                isDisabled={store?.productSelections.length === 0}
+                onChange={() =>
+                  setFilters({
+                    ...filters,
+                    productSelection: !filters.productSelection,
+                  })
+                }
+              />
+            </Spacings.Inline>
+          </Constraints.Horizontal>
+          <Constraints.Horizontal max={16}>
+            <Spacings.Inline>
+              <FieldLabel title={formatMessage(messages.priceChannel)} />
+              <ToggleInput
+                size="small"
+                isChecked={filters.priceChannel}
+                isDisabled={store?.distributionChannels.length === 0}
+                onChange={() =>
+                  setFilters({
+                    ...filters,
+                    priceChannel: !filters.priceChannel,
+                  })
+                }
+              />
+            </Spacings.Inline>
+          </Constraints.Horizontal>
+        </Spacings.Stack>
       </Spacings.Stack>
     </SpacingsInset>
   );

@@ -16,7 +16,6 @@ export default defineMessages({
   },
   noResults: {
     id: 'storeDetails.noResults',
-    defaultMessage:
-      'There are no storeDetails available in this project.',
+    defaultMessage: 'There are no storeDetails available in this project.',
   },
 });

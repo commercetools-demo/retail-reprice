@@ -14,7 +14,6 @@
   flex-direction: row;
   flex-shrink: 0;
   height: 100%;
-  overflow: hidden;
   position: relative;
   width: auto;
 }
@@ -44,7 +43,6 @@
 }
 
 .bodyContainer {
-  overflow-y: scroll;
   width: var(--sidebar-width);
   animation: shrink var(--duration);
 }

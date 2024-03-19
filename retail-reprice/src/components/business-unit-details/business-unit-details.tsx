@@ -71,7 +71,7 @@ const BusinessUnitDetails = (props: TBusinessUnitDetailsProps) => {
       </Spacings.Stack>
       <Spacings.Stack scale="xs">
         <TagsProvider>
-          <StoresTable items={businessUnit?.stores} redirectUrl='stores' />
+          <StoresTable items={businessUnit?.stores} redirectUrl="stores" />
         </TagsProvider>
       </Spacings.Stack>
     </Spacings.Stack>

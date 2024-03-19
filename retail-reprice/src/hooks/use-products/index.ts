@@ -1,23 +1,30 @@
-import { useAsyncDispatch, actions, TSdkAction } from '@commercetools-frontend/sdk';
+import {
+  useAsyncDispatch,
+  actions,
+  TSdkAction,
+} from '@commercetools-frontend/sdk';
 import { MC_API_PROXY_TARGETS } from '@commercetools-frontend/constants';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { TProductProjection } from '../../types/generated/ctp';
-import { requestBuilder } from '../../utils/query';
+import { projectionBuilder, requestBuilder } from '../../utils/query';
 
 export interface Result {
-    "total": number;
-    "offset": number;
-    "limit": number;
-    "hits": {
-        id: string;
-        productProjection: TProductProjection
-    }[]
+  total: number;
+  offset: number;
+  limit: number;
+  hits: {
+    id: string;
+    productProjection: TProductProjection;
+  }[];
 }
 
 export interface Query {
   storeId: string;
+  storeKey?: string;
+  country?: string;
+  currency?: string;
   productSelections?: string[];
-
+  distributionChannels?: string[];
 }
 
 function buildUrlWithParams(
@@ -39,15 +46,33 @@ function buildUrlWithParams(
 
   return `${baseUrl}?${queryParams}`;
 }
+
+const getPrice = (
+  requestQuery: Query,
+  price: TProductProjection['masterVariant']['price']
+) => {
+  if (!requestQuery.distributionChannels?.length) {
+    return price;
+  }
+  return requestQuery.distributionChannels.includes(price?.channel?.id || '')
+    ? price
+    : undefined;
+};
 export const UseProducts = () => {
-  const dispatch = useAsyncDispatch<TSdkAction,Result>();
+  const dispatch = useAsyncDispatch<TSdkAction, Result>();
   const context = useApplicationContext((context) => context);
 
-  const getProducts = async (requestQuery: Query, limit: number, page: number): Promise<Result> => {
+  const getProducts = async (
+    requestQuery: Query,
+    limit: number,
+    page: number
+  ): Promise<Result> => {
     const offset = (page - 1) * limit;
+    console.log('requestQuery', requestQuery);
 
+    const projection = projectionBuilder(requestQuery, context.dataLocale);
     const query = requestBuilder(requestQuery);
-    return dispatch(
+    const result = await dispatch(
       actions.post({
         mcApiProxyTarget: MC_API_PROXY_TARGETS.COMMERCETOOLS_PLATFORM,
         uri: buildUrlWithParams(
@@ -56,14 +81,26 @@ export const UseProducts = () => {
         ),
         payload: {
           query,
-          projection: {
-            localeProjection: [context.dataLocale]
-          },
+          projection,
           limit,
           offset,
         },
       })
     );
+    return {
+      ...result,
+      hits: result.hits.map((hit) => ({
+        ...hit,
+        productProjection: {
+          ...hit.productProjection,
+          masterVariant: {
+            ...hit.productProjection.masterVariant,
+            // price: getPrice(requestQuery,hit.productProjection.masterVariant.price),
+            price: hit.productProjection.masterVariant.price,
+          },
+        },
+      })),
+    };
   };
 
   return {

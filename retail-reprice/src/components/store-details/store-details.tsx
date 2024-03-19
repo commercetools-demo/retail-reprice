@@ -14,12 +14,6 @@ import ProductFilters from '../products/product-filters';
 import IconButton from '@commercetools-uikit/icon-button';
 import SidebarLayout from '../sidebar-layout';
 
-export const columns = [
-  { key: 'name', label: 'Product name' },
-  { key: 'id', label: 'Product ID' },
-  { key: 'key', label: 'Product key', isSortable: true },
-];
-
 type TStoreDetailsProps = {
   linkToWelcome: string;
 };
@@ -42,6 +36,8 @@ const StoreDetails = (props: TStoreDetailsProps) => {
   });
 
   const updateFilters = (query: Omit<Query, 'storeId'>) => {
+    console.log('query', query);
+
     setFilters({
       storeId: params.storeId,
       ...query,
@@ -72,7 +68,7 @@ const StoreDetails = (props: TStoreDetailsProps) => {
           icon={<FilterIcon />}
           onClick={() => setAreFiltersDisplayed(!areFiltersDisplayed)}
         />
-        <Spacings.Inline alignItems='stretch'>
+        <Spacings.Inline alignItems="stretch">
           <ProductList result={result} />
           <SidebarLayout
             isOpen={areFiltersDisplayed}

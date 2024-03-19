@@ -13,3 +13,9 @@ export type TGraphqlUpdateAction = Record<string, Record<string, unknown>>;
 export type TChangeNameActionPayload = {
   name: Record<string, string>;
 };
+
+export interface Money {
+  fractionDigits?: number;
+  centAmount?: number;
+  currencyCode?: string; // The currency code compliant to ISO 4217.
+}
