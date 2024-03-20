@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Query, Result } from '../../hooks/use-products';
 import Spacings from '@commercetools-uikit/spacings';
 import { useStoreDetailsFetcher } from '../../hooks/use-stores-connector';
@@ -20,9 +20,15 @@ type Props = {
 };
 
 const ProductFilters: React.FC<Props> = ({ onUpdateFilters, storeId }) => {
-  const { project } = useApplicationContext((context) => ({
+  const { project, dataLocale } = useApplicationContext((context) => ({
+    dataLocale: context.dataLocale,
     project: context.project,
   }));
+
+  const defaultCountry = useMemo(() => {
+    const localeSplitted = dataLocale?.split('-') || [];
+    return localeSplitted.length > 1 ? localeSplitted[1] : '';
+  }, [dataLocale]);
   const { loading, store } = useStoreDetailsFetcher(storeId);
 
   const [data, setData] = useState<Omit<Query, 'storeId'>>({});
@@ -31,7 +37,7 @@ const ProductFilters: React.FC<Props> = ({ onUpdateFilters, storeId }) => {
     productSelection: false,
     priceChannel: true,
     noAnyChannelPrice: false,
-    country: '',
+    country: defaultCountry,
     currency: '',
   });
 
