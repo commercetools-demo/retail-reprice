@@ -90,13 +90,14 @@ const StoresTable = (props: Props) => {
       onSortChange={
         props?.tableSorting ? props.tableSorting.onChange : undefined
       }
-      onRowClick={(row) =>
-        push(
-          `${match.url}/${
-            props.redirectUrl ? `${props.redirectUrl}/${row.id}` : row.id
-          }`
-        )
-      }
+      onRowClick={(row, _, column) => {
+        if (column !== 'tags')
+          push(
+            `${match.url}/${
+              props.redirectUrl ? `${props.redirectUrl}/${row.id}` : row.id
+            }`
+          );
+      }}
     />
   );
 };
