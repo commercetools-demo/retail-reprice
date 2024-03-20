@@ -19,3 +19,9 @@ export interface Money {
   centAmount?: number;
   currencyCode?: string; // The currency code compliant to ISO 4217.
 }
+export interface Product {
+  version: number;
+}
+export interface StandalonePrice {
+  version: number;
+}

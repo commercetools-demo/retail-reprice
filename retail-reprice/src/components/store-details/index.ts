@@ -1,7 +1,10 @@
 import { lazy } from 'react';
 
-const BusinessUnitDetails = lazy(
-  () => import('./store-details' /* webpackChunkName: "store-details" */)
+const StoreDetails = lazy(
+  () =>
+    import(
+      './store-details-wrapper' /* webpackChunkName: "store-details-wrapper" */
+    )
 );
 
-export default BusinessUnitDetails;
+export default StoreDetails;

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Query, Result } from '../../hooks/use-products';
+import { Query } from '../../hooks/use-products';
 import Spacings from '@commercetools-uikit/spacings';
 import { useStoreDetailsFetcher } from '../../hooks/use-stores-connector';
 import LoadingSpinner from '@commercetools-uikit/loading-spinner';
@@ -13,13 +13,13 @@ import Constraints from '@commercetools-uikit/constraints';
 import messages from './messages';
 import { useIntl } from 'react-intl';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
+import { useStoreDetailsContext } from '../../providers/storeDetails/store-details';
 type Props = {
-  result?: Result;
   storeId: string;
-  onUpdateFilters: (query: Omit<Query, 'storeId'>) => void;
 };
 
-const ProductFilters: React.FC<Props> = ({ onUpdateFilters, storeId }) => {
+const ProductFilters: React.FC<Props> = ({ storeId }) => {
+  const { updateFilters } = useStoreDetailsContext();
   const { project, dataLocale } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
     project: context.project,
@@ -60,7 +60,10 @@ const ProductFilters: React.FC<Props> = ({ onUpdateFilters, storeId }) => {
   }, [filters, store]);
 
   useEffect(() => {
-    onUpdateFilters(data);
+    console.log('data', data);
+    console.log('updateFilters', data);
+
+    updateFilters(data);
   }, [data]);
 
   useEffect(() => {

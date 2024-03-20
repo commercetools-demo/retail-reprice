@@ -1,14 +1,13 @@
 import { Result } from '../../hooks/use-products';
 import DataTable from '@commercetools-uikit/data-table';
 import { useDataTableSortingState } from '@commercetools-uikit/hooks';
-import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
-import { useHistory, useRouteMatch } from 'react-router';
 import { useState } from 'react';
 import DataTableManager, {
   UPDATE_ACTIONS,
 } from '@commercetools-uikit/data-table-manager';
-import { useIntl } from 'react-intl';
-import { CurrencyHelpers } from '../../utils/currencyHelpers';
+import CellRenderer from './cell-renderer';
+import { useStoreDetailsContext } from '../../providers/storeDetails/store-details';
+
 export const initialVisibleColumns = [
   { key: 'name', label: 'Product name' },
 
@@ -19,14 +18,8 @@ const initialHiddenColumns = [{ key: 'id', label: 'Product ID' }];
 
 const initialColumnsState = [...initialVisibleColumns, ...initialHiddenColumns];
 
-export const ProductList = ({ result }: { result?: Result }) => {
-  const intl = useIntl();
-  const match = useRouteMatch();
-  const { push } = useHistory();
-  const { dataLocale } = useApplicationContext((context) => ({
-    dataLocale: context.dataLocale,
-    projectLanguages: context.project?.languages,
-  }));
+export const ProductList = () => {
+  const { result } = useStoreDetailsContext();
 
   const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
 
@@ -106,26 +99,12 @@ export const ProductList = ({ result }: { result?: Result }) => {
           isCondensed
           columns={initialVisibleColumns}
           rows={result?.hits ?? []}
-          itemRenderer={(item, column) => {
-            switch (column.key) {
-              case 'key':
-                return item.productProjection.key;
-              case 'id':
-                return item.productProjection.id;
-              case 'name':
-                return item.productProjection.name?.[dataLocale || ''];
-              case 'price':
-                return CurrencyHelpers.formatForCurrency(
-                  item.productProjection.masterVariant?.price?.value
-                );
-              default:
-                return null;
-            }
-          }}
+          itemRenderer={(item, column) => (
+            <CellRenderer item={item} columnKey={column.key} />
+          )}
           sortedBy={tableSorting.value.key}
           sortDirection={tableSorting.value.order}
           onSortChange={tableSorting.onChange}
-          onRowClick={(row) => push(`${match.url}/${row.id}`)}
         />
       </DataTableManager>
     </div>

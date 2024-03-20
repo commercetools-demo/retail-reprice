@@ -6,7 +6,7 @@ import Welcome from './components/welcome';
 import Stores from './components/stores';
 import BusinessUnits from './components/business-units';
 import BusinessUnitDetails from './components/business-unit-details';
-import StoreDetails from './components/store-details/store-details';
+import StoreDetails from './components/store-details';
 
 type ApplicationRoutesProps = {
   children?: ReactNode;
