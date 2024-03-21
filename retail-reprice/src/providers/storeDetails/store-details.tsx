@@ -43,7 +43,7 @@ const StoreDetailsProvider = ({
     if (result) {
       const newResult = {
         ...result,
-        hits: result.hits.map((pp) => {
+        results: result.results.map((pp) => {
           if (pp.productProjection.id === productId) {
             return {
               ...pp,

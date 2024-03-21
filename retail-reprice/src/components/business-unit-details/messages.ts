@@ -1,13 +1,13 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  backToWelcome: {
+  backToBusinessUnitList: {
     id: 'businessUnitDetails.backToWelcome',
-    defaultMessage: 'Back to Welcome page',
+    defaultMessage: 'Back to business units',
   },
   title: {
     id: 'businessUnitDetails.title',
-    defaultMessage: 'businessUnitDetails list',
+    defaultMessage: 'Business unit details: {businessUnitName}',
   },
   demoHint: {
     id: 'businessUnitDetails.demoHint',
@@ -18,5 +18,9 @@ export default defineMessages({
     id: 'businessUnitDetails.noResults',
     defaultMessage:
       'There are no businessUnitDetails available in this project.',
+  },
+  allStores: {
+    id: 'stores.storeTable',
+    defaultMessage: 'All stores',
   },
 });

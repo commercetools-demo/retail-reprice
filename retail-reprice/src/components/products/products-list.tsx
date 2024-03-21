@@ -95,10 +95,10 @@ export const ProductList = () => {
         columnManager={columnManager}
         displaySettings={displaySettings}
       >
-        <DataTable<NonNullable<Result['hits']['0']>>
+        <DataTable<NonNullable<Result['results']['0']>>
           isCondensed
           columns={initialVisibleColumns}
-          rows={result?.hits ?? []}
+          rows={result?.results ?? []}
           itemRenderer={(item, column) => (
             <CellRenderer item={item} columnKey={column.key} />
           )}

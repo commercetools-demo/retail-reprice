@@ -69,6 +69,6 @@ const StoreDetails = (props: TStoreDetailsProps) => {
     </Spacings.Stack>
   );
 };
-StoreDetails.displayName = 'BusinessUnitDetails';
+StoreDetails.displayName = 'StoreDetails';
 
 export default StoreDetails;

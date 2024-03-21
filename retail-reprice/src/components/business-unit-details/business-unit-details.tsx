@@ -3,19 +3,20 @@ import { BackIcon } from '@commercetools-uikit/icons';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
 import { useIntl } from 'react-intl';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useRouteMatch } from 'react-router-dom';
 import { useBusinessUnitDetailsFetcher } from '../../hooks/use-business-units-connector';
 import TagsProvider from '../../providers/tags/tags';
-import StoresTable from '../stores/store-table';
 import messages from './messages';
+import TaggedStoresTables from '../stores/tagged-store-tables';
+import CollapsableStoreTable from '../stores/collapsable-store-table';
 
-type TBusinessUnitDetailsProps = {
-  linkToWelcome: string;
-};
 
-const BusinessUnitDetails = (props: TBusinessUnitDetailsProps) => {
+const BusinessUnitDetails = () => {
   const intl = useIntl();
   const params = useParams<{ id: string }>();
+  const match = useRouteMatch();
+
+  const prevUrl = match.url.split('/').slice(0, -1).join('/');
 
   const { businessUnit } = useBusinessUnitDetailsFetcher(params.id);
 
@@ -24,15 +25,27 @@ const BusinessUnitDetails = (props: TBusinessUnitDetailsProps) => {
       <Spacings.Stack scale="xs">
         <FlatButton
           as={RouterLink}
-          to={props.linkToWelcome}
-          label={intl.formatMessage(messages.backToWelcome)}
+          to={prevUrl}
+          label={intl.formatMessage(messages.backToBusinessUnitList)}
           icon={<BackIcon />}
         />
-        <Text.Headline as="h2" intlMessage={messages.title} />
+        <Text.Headline as="h2">
+          {intl.formatMessage(messages.title, {
+            businessUnitName: businessUnit?.name,
+          })}
+        </Text.Headline>
       </Spacings.Stack>
       <Spacings.Stack scale="xs">
         <TagsProvider>
-          <StoresTable items={businessUnit?.stores} redirectUrl="stores" />
+          <TaggedStoresTables
+            items={businessUnit?.stores}
+            redirectUrl="stores"
+          />
+          <CollapsableStoreTable
+            stores={businessUnit?.stores}
+            redirectUrl="stores"
+            header={intl.formatMessage(messages.allStores)}
+          />
         </TagsProvider>
       </Spacings.Stack>
     </Spacings.Stack>

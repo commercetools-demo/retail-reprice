@@ -41,7 +41,7 @@ const ApplicationRoutes = (_props: ApplicationRoutesProps) => {
           <StoreDetails linkToWelcome={match.url} />
         </Route>
         <Route path={`${match.path}/business-units/:id`}>
-          <BusinessUnitDetails linkToWelcome={match.url} />
+          <BusinessUnitDetails />
         </Route>
         <Route path={`${match.path}/business-units`}>
           <BusinessUnits linkToWelcome={match.url} />

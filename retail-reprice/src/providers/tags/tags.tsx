@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   useCustomObjectFetcher,
   useCustomObjectUpdater,
@@ -7,8 +7,10 @@ import {
 export const CUSTOM_OBJECT_KEY = 'storesToTags';
 export const CUSTOM_OBJECT_CONTAINER = 'retail-reprice';
 
+export type TTag = Record<string, { stores: string[] }>;
+
 interface TagsContextReturn {
-  customObject: any;
+  tags: TTag;
   loading: boolean;
   addTag: (tag: string, storeId: string) => void;
   removeTag: (tag: string, storeId: string) => void;
@@ -16,7 +18,7 @@ interface TagsContextReturn {
 
 const initialData = {
   loading: false,
-  customObject: null,
+  tags: {},
   addTag: () => {},
   removeTag: () => {},
 };
@@ -71,7 +73,9 @@ const TagsProvider = ({ children }: React.PropsWithChildren<{}>) => {
   }, [customObjectData, loading]);
 
   return (
-    <TagsContext.Provider value={{ customObject, loading, addTag, removeTag }}>
+    <TagsContext.Provider
+      value={{ tags: customObject, loading, addTag, removeTag }}
+    >
       {children}
     </TagsContext.Provider>
   );

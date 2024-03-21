@@ -13,7 +13,7 @@ export interface Result {
   total: number;
   offset: number;
   limit: number;
-  hits: {
+  results: {
     id: string;
     productProjection: TProductProjection;
   }[];
@@ -70,7 +70,7 @@ function mapSearchResultToProductPrices(
 ): Result | PromiseLike<Result> {
   return {
     ...result,
-    hits: result.hits.map((hit) => ({
+    results: result.results.map((hit) => ({
       ...hit,
       productProjection: {
         ...hit.productProjection,

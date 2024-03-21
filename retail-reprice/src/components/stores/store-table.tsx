@@ -14,6 +14,7 @@ import { useTagsContext } from '../../providers/tags/tags';
 import { TStore } from '../../types/generated/ctp';
 import NewTag from '../tags/new-tag';
 import styles from './store-table.module.css';
+
 type Props = {
   items?: TStore[];
   tableSorting?: TDataTableSortingState;
@@ -33,17 +34,17 @@ const StoresTable = (props: Props) => {
   const { push } = useHistory();
   const match = useRouteMatch();
 
-  const { customObject, addTag, removeTag, loading } = useTagsContext();
+  const { tags, addTag, removeTag, loading } = useTagsContext();
 
   const { getTagsForStore } = useTags();
 
   const renderTags = (id: string) => {
-    const tags = getTagsForStore(id, customObject);
+    const tagList = getTagsForStore(id, tags);
     return (
       <Spacings.Inline justifyContent="flex-start">
         <TagList className={styles.tagList}>
-          {tags &&
-            tags.map((tag, index) => (
+          {tagList &&
+            tagList.map((tag, index) => (
               <Tag key={index} onRemove={() => removeTag(tag, id)}>
                 {tag}
               </Tag>
