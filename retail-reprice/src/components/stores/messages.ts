@@ -22,4 +22,8 @@ export default defineMessages({
     id: 'stores.addTag',
     defaultMessage: 'Add a tag.',
   },
+  allStores: {
+    id: 'stores.allStores',
+    defaultMessage: 'All stores',
+  },
 });

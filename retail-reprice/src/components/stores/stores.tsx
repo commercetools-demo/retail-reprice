@@ -17,6 +17,8 @@ import { useStoresFetcher } from '../../hooks/use-stores-connector';
 import messages from './messages';
 import StoresTable from './store-table';
 import TagsProvider from '../../providers/tags/tags';
+import TaggedStoresTables from './tagged-store-tables';
+import CollapsableStoreTable from './collapsable-store-table';
 
 type TStoresProps = {
   linkToWelcome: string;
@@ -65,18 +67,16 @@ const Stores = (props: TStoresProps) => {
       {storesPaginatedResult ? (
         <Spacings.Stack scale="l">
           <TagsProvider>
-            <StoresTable
-              items={storesPaginatedResult.results}
-              tableSorting={tableSorting}
-              redirectUrl=""
-            />
-            <Pagination
-              page={page.value}
-              onPageChange={page.onChange}
-              perPage={perPage.value}
-              onPerPageChange={perPage.onChange}
-              totalItems={storesPaginatedResult.total}
-            />
+          <TaggedStoresTables
+            items={storesPaginatedResult.results}
+            redirectUrl=""
+          />
+          <CollapsableStoreTable
+            stores={storesPaginatedResult.results}
+            redirectUrl=""
+            header={intl.formatMessage(messages.allStores)}
+          />
+            
             {/* <Switch>
             <SuspendedRoute path={`${match.url}/:id`}>
               <ChannelDetails onClose={() => push(`${match.url}`)} />

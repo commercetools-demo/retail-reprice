@@ -40,6 +40,8 @@ const TaggedStoresTables: React.FC<Props> = ({ items, redirectUrl }) => {
           stores={getStoresbyIds(tags[tag].stores)}
           key={index}
           header={tag}
+          tag={tag}
+          showSettings
           redirectUrl={redirectUrl}
         />
       ))}

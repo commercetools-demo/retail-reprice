@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
   useCustomObjectFetcher,
   useCustomObjectUpdater,
+  useTags,
 } from '../../hooks/use-custom-object-connector';
 
 export const CUSTOM_OBJECT_KEY = 'storesToTags';
@@ -14,6 +15,7 @@ interface TagsContextReturn {
   loading: boolean;
   addTag: (tag: string, storeId: string) => void;
   removeTag: (tag: string, storeId: string) => void;
+  renameTag: (oldName: string, newName: string, storeId: string) => void;
 }
 
 const initialData = {
@@ -21,6 +23,7 @@ const initialData = {
   tags: {},
   addTag: () => {},
   removeTag: () => {},
+  renameTag: () => {},
 };
 
 const TagsContext = React.createContext<TagsContextReturn>(initialData);
@@ -32,40 +35,21 @@ const TagsProvider = ({ children }: React.PropsWithChildren<{}>) => {
   });
   const { execute } = useCustomObjectUpdater();
 
+  const {getAddTagDraft, getRemoveTagDraft, getRenameTagDraft} = useTags();
+
   const [customObject, setCustomObject] = useState<any>();
 
   const addTag = async (tag: string, storeId: string) => {
-    const result = await execute({
-      draft: {
-        container: CUSTOM_OBJECT_CONTAINER,
-        key: CUSTOM_OBJECT_KEY,
-        value: JSON.stringify({
-          ...customObject,
-          [tag]: {
-            ...customObject?.[tag],
-            stores: [...(customObject?.[tag]?.stores || []), storeId],
-          },
-        }),
-      },
-    });
+    const result = await execute(getAddTagDraft(tag, storeId, customObject));
     if (!result.errors) {
       return result;
     }
   };
   const removeTag = async (tag: string, storeId: string) => {
-    return execute({
-      draft: {
-        container: CUSTOM_OBJECT_CONTAINER,
-        key: CUSTOM_OBJECT_KEY,
-        value: JSON.stringify({
-          ...customObject,
-          [tag]: {
-            ...customObject?.[tag],
-            stores: customObject?.[tag].stores.filter((id) => id !== storeId),
-          },
-        }),
-      },
-    });
+    return execute(getRemoveTagDraft(tag, storeId, customObject));
+  };
+  const renameTag = async (oldName: string, newName: string) => {
+    return execute(getRenameTagDraft(oldName, newName, customObject));
   };
 
   useEffect(() => {
@@ -74,7 +58,7 @@ const TagsProvider = ({ children }: React.PropsWithChildren<{}>) => {
 
   return (
     <TagsContext.Provider
-      value={{ tags: customObject, loading, addTag, removeTag }}
+      value={{ tags: customObject, loading, addTag, removeTag, renameTag }}
     >
       {children}
     </TagsContext.Provider>
