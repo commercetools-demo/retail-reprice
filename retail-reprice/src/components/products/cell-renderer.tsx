@@ -6,17 +6,19 @@ import { useStoreDetailsContext } from '../../providers/storeDetails/store-detai
 type Props = {
   item: any;
   columnKey: string;
+  handlePriceChange: (productId: string) => void;
 };
 
-const CellRenderer: React.FC<Props> = ({ columnKey, item }) => {
+const CellRenderer: React.FC<Props> = ({
+  columnKey,
+  item,
+  handlePriceChange,
+}) => {
   const { dataLocale } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
   }));
   const { filters } = useStoreDetailsContext();
-  const handlePriceChange = (centAmount: number, item: any) => {};
   switch (columnKey) {
-    case 'key':
-      return item.productProjection.key;
     case 'id':
       return item.productProjection.id;
     case 'name':
@@ -26,7 +28,7 @@ const CellRenderer: React.FC<Props> = ({ columnKey, item }) => {
         <PriceEditor
           product={item.productProjection}
           currency={filters.currency}
-          onPriceChange={(centAmount) => handlePriceChange(centAmount, item)}
+          onPriceChange={handlePriceChange}
         />
       );
     default:

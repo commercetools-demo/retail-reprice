@@ -55,6 +55,7 @@
     "@commercetools-uikit/loading-spinner": "^18.5.0",
     "@commercetools-uikit/localized-text-field": "^18.1.0",
     "@commercetools-uikit/localized-text-input": "^18.1.0",
+    "@commercetools-uikit/money-input": "^19.1.0",
     "@commercetools-uikit/notifications": "^18.1.0",
     "@commercetools-uikit/pagination": "^18.1.0",
     "@commercetools-uikit/search-select-field": "^19.1.0",

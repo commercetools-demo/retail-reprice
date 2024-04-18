@@ -102,7 +102,7 @@ export const UseProducts = () => {
   ): Promise<Result> => {
     const offset = (page - 1) * limit;
 
-    const projection = projectionBuilder(requestQuery, context.dataLocale);
+    const productProjectionParameters = projectionBuilder(requestQuery, context.dataLocale);
     const query = requestBuilder(requestQuery);
     const result = await dispatchProductSearch(
       actions.post({
@@ -113,7 +113,7 @@ export const UseProducts = () => {
         ),
         payload: {
           query,
-          projection,
+          productProjectionParameters,
           limit,
           offset,
         },
@@ -166,7 +166,7 @@ export const UseProducts = () => {
     priceMode?: string,
     oldPrice?: Money,
     oldPriceId?: string | null
-  ): Promise<Product> => {
+  ): Promise<Product | StandalonePrice> => {
     if (priceMode === 'Standalone') {
       return updateProductStandalonePrice(newPrice, oldPriceId);
     }

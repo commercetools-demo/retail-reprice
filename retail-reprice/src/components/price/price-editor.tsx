@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import NumberInput from '@commercetools-uikit/number-input';
 import { UseProducts } from '../../hooks/use-products';
 import { TProductProjection } from '../../types/generated/ctp';
@@ -7,23 +7,33 @@ import { useStoreDetailsContext } from '../../providers/storeDetails/store-detai
 type Props = {
   product: TProductProjection;
   currency?: string;
-  onPriceChange: (centAmount: number) => void;
+  onPriceChange: (productId: string) => void;
 };
 
 const PriceEditor: React.FC<Props> = ({ product, currency, onPriceChange }) => {
   const { updateProductPrice } = UseProducts();
-  const { filters, result, updateProductVersion } = useStoreDetailsContext();
-  const [value, setValue] = useState<number>(
-    (product.masterVariant.price?.value?.centAmount ?? 0) / 100
-  );
+  const { filters, result } = useStoreDetailsContext();
+
+  const initialPrice = useMemo(() => {
+    return (product.masterVariant.price?.value?.centAmount ?? 0) / 100;
+  }, [product]);
+  const steps = useMemo(() => {
+    return Math.pow(
+      10,
+      (product.masterVariant.price?.value?.fractionDigits ?? 2) * -1
+    );
+  }, [product]);
+
+  const [value, setValue] = useState<number>(initialPrice);
 
   const handleStorePrice = async (e: React.FormEvent<HTMLFormElement>) => {
-    const latestProduct = result?.hits.find(
+    e.preventDefault();
+    const latestProduct = result?.results.find(
       (p) => p.productProjection.id === product.id
     );
-    e.preventDefault();
-    if (value) {
-      const result = await updateProductPrice(
+    onPriceChange(product.id);
+    if (value !== initialPrice) {
+      await updateProductPrice(
         product.id,
         latestProduct?.productProjection.version!,
         {
@@ -38,8 +48,6 @@ const PriceEditor: React.FC<Props> = ({ product, currency, onPriceChange }) => {
         product.masterVariant.price?.value,
         product.masterVariant.price?.id
       );
-
-      updateProductVersion(product.id, result.version);
     }
   };
 
@@ -53,6 +61,8 @@ const PriceEditor: React.FC<Props> = ({ product, currency, onPriceChange }) => {
         isDisabled={!currency}
         horizontalConstraint={5}
         value={value}
+        step={steps}
+        data-price-editor={product.id}
         onChange={(e) => {
           setValue(Number(e.target.value));
         }}

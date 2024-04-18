@@ -11,7 +11,6 @@ import { useStoreDetailsContext } from '../../providers/storeDetails/store-detai
 export const initialVisibleColumns = [
   { key: 'name', label: 'Product name' },
 
-  { key: 'key', label: 'Product key', isSortable: true },
   { key: 'price', label: 'Product Price' },
 ];
 const initialHiddenColumns = [{ key: 'id', label: 'Product ID' }];
@@ -87,6 +86,22 @@ export const ProductList = () => {
     visibleColumnKeys: tableData.visibleColumnKeys,
     hideableColumns: tableData.columns,
   };
+
+  const handlePriceChange = (productId: string) => {
+    const allPriceEditors = document.querySelectorAll('[data-price-editor]');
+    for (let index = 0; index < allPriceEditors.length; index++) {
+      const element = allPriceEditors[index];
+      if (
+        element.getAttribute('data-price-editor') === productId &&
+        index !== allPriceEditors.length - 1
+      ) {
+        const nextElement = allPriceEditors[index + 1] as HTMLInputElement;
+        nextElement.select();
+        nextElement.focus();
+        break;
+      }
+    }
+  };
   return (
     <div style={{ width: '100%' }}>
       <DataTableManager
@@ -100,7 +115,11 @@ export const ProductList = () => {
           columns={initialVisibleColumns}
           rows={result?.results ?? []}
           itemRenderer={(item, column) => (
-            <CellRenderer item={item} columnKey={column.key} />
+            <CellRenderer
+              item={item}
+              columnKey={column.key}
+              handlePriceChange={handlePriceChange}
+            />
           )}
           sortedBy={tableSorting.value.key}
           sortDirection={tableSorting.value.order}

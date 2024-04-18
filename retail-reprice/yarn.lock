@@ -2337,6 +2337,24 @@
     prop-types "15.8.1"
     react-intl "^6.3.2"
 
+"@commercetools-uikit/flat-button@19.1.0":
+  version "19.1.0"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/flat-button/-/flat-button-19.1.0.tgz#7ea5e7a10b962eae7155f0e4236c5a1c0f4c938d"
+  integrity sha512-5dCthUZjOUIfd6wz6Tuqr0tTs6kL1dSF7++Io3hz7j24eqibFN4c0sQ2ednpgmG+lyWTd2Y8IU3EPJvcWvHtGw==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/accessible-button" "19.1.0"
+    "@commercetools-uikit/design-system" "19.1.0"
+    "@commercetools-uikit/spacings-inline" "19.1.0"
+    "@commercetools-uikit/text" "19.1.0"
+    "@commercetools-uikit/utils" "19.1.0"
+    "@emotion/react" "^11.10.5"
+    "@emotion/styled" "^11.10.5"
+    lodash "4.17.21"
+    prop-types "15.8.1"
+    react-intl "^6.3.2"
+
 "@commercetools-uikit/grid@18.5.0":
   version "18.5.0"
   resolved "https://registry.yarnpkg.com/@commercetools-uikit/grid/-/grid-18.5.0.tgz#5533effdb900b07c978bddd218e76ec3a4759669"
@@ -2563,6 +2581,21 @@
     prop-types "15.8.1"
     react-textarea-autosize "8.4.0"
 
+"@commercetools-uikit/input-utils@19.1.0":
+  version "19.1.0"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/input-utils/-/input-utils-19.1.0.tgz#d0d089c815db957361bb91a9d05904e1eb0871da"
+  integrity sha512-dEcaElPOew0So9PxOJQ8FtbuHD/tXTRuY1vkLNDHjWKFIpvjxyVLOyOpNnikSsYO070FFk3faESqp3sP8DBVfQ==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/design-system" "19.1.0"
+    "@commercetools-uikit/flat-button" "19.1.0"
+    "@commercetools-uikit/icons" "19.1.0"
+    "@commercetools-uikit/utils" "19.1.0"
+    "@emotion/react" "^11.10.5"
+    prop-types "15.8.1"
+    react-textarea-autosize "8.4.0"
+
 "@commercetools-uikit/label@18.2.0", "@commercetools-uikit/label@^18.1.0":
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/@commercetools-uikit/label/-/label-18.2.0.tgz#f0627788a1c0b4153daae5f7b5e6998760c2f194"
@@ -2748,6 +2781,27 @@
     "@emotion/styled" "^11.10.5"
     prop-types "15.8.1"
     react-intl "^6.3.2"
+
+"@commercetools-uikit/money-input@^19.1.0":
+  version "19.1.0"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/money-input/-/money-input-19.1.0.tgz#a4dd9303c62b122421669c40c899135b8da3afc1"
+  integrity sha512-6CRHoVt4NVUEAodGkhWDqgEHsQUVF8CSACKw3n++IKkcmo9uFTawVVYX0MGaKXzEBe+SedWYDD3g9ICZzCYFzw==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/constraints" "19.1.0"
+    "@commercetools-uikit/design-system" "19.1.0"
+    "@commercetools-uikit/hooks" "19.1.0"
+    "@commercetools-uikit/icons" "19.1.0"
+    "@commercetools-uikit/input-utils" "19.1.0"
+    "@commercetools-uikit/select-utils" "19.1.0"
+    "@commercetools-uikit/tooltip" "19.1.0"
+    "@commercetools-uikit/utils" "19.1.0"
+    "@emotion/react" "^11.10.5"
+    "@emotion/styled" "^11.10.5"
+    lodash "4.17.21"
+    prop-types "15.8.1"
+    react-select "5.8.0"
 
 "@commercetools-uikit/notifications@^18.1.0":
   version "18.2.0"
@@ -3495,6 +3549,24 @@
     "@emotion/react" "^11.10.5"
     "@emotion/styled" "^11.10.5"
     prop-types "15.8.1"
+
+"@commercetools-uikit/tooltip@19.1.0":
+  version "19.1.0"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/tooltip/-/tooltip-19.1.0.tgz#69e282bdd73c3fac049eb8c778e94f3e84973c50"
+  integrity sha512-gb4BzFGDhvFdbh3Nni13eLTW9symFGwMBEpcMBHuXy50a9sH/eqjJBCDI3KcF7ghGHU+GED2YtSxL2uGxeOhlA==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/constraints" "19.1.0"
+    "@commercetools-uikit/design-system" "19.1.0"
+    "@commercetools-uikit/hooks" "19.1.0"
+    "@commercetools-uikit/utils" "19.1.0"
+    "@emotion/react" "^11.10.5"
+    "@emotion/styled" "^11.10.5"
+    lodash "4.17.21"
+    prop-types "15.8.1"
+    react-is "17.0.2"
+    use-popper "1.1.6"
 
 "@commercetools-uikit/tooltip@^18.5.0":
   version "18.5.0"
