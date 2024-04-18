@@ -67,16 +67,16 @@ const Stores = (props: TStoresProps) => {
       {storesPaginatedResult ? (
         <Spacings.Stack scale="l">
           <TagsProvider>
-          <TaggedStoresTables
-            items={storesPaginatedResult.results}
-            redirectUrl=""
-          />
-          <CollapsableStoreTable
-            stores={storesPaginatedResult.results}
-            redirectUrl=""
-            header={intl.formatMessage(messages.allStores)}
-          />
-            
+            <TaggedStoresTables
+              items={storesPaginatedResult.results}
+              redirectUrl=""
+            />
+            <CollapsableStoreTable
+              stores={storesPaginatedResult.results}
+              redirectUrl=""
+              header={intl.formatMessage(messages.allStores)}
+            />
+
             {/* <Switch>
             <SuspendedRoute path={`${match.url}/:id`}>
               <ChannelDetails onClose={() => push(`${match.url}`)} />

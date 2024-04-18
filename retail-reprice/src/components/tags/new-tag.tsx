@@ -1,31 +1,38 @@
 import { Tag } from '@commercetools-uikit/tag';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PlusThinIcon } from '@commercetools-uikit/icons';
-import TextInput from '@commercetools-uikit/text-input/';
-import styles from './tag.module.css';
+import { useTagsContext } from '../../providers/tags/tags';
+import SelectInput from '@commercetools-uikit/creatable-select-input';
+import Constraints from '@commercetools-uikit/constraints';
+
 type Props = {
   onAdd: (tag: string) => void;
 };
 
 const NewTag = (props: Props) => {
   const [isInputVisible, setIsInputVisible] = useState(false);
-  const [tagName, setTagName] = useState('');
+  const { tags } = useTagsContext();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    props.onAdd(tagName);
+  const handleSubmit = (tag: { label: string; value: string }) => {
+    props.onAdd(tag.value);
     setIsInputVisible(false);
   };
   return (
     <>
       {isInputVisible && (
-        <form onSubmit={handleSubmit}>
-          <TextInput
-            value={tagName}
-            onChange={(e) => setTagName(e.target.value)}
-            className={styles.input}
+        <Constraints.Horizontal max={4}>
+          <SelectInput
+            options={Object.keys(tags).map((tag) => ({
+              label: tag,
+              value: tag,
+            }))}
+            onChange={(e) =>
+              handleSubmit(e.target.value as { label: string; value: string })
+            }
+            isSearchable
+            menuPortalZIndex={40}
           />
-        </form>
+        </Constraints.Horizontal>
       )}
       {!isInputVisible && (
         <Tag horizontalConstraint={1} onClick={() => setIsInputVisible(true)}>

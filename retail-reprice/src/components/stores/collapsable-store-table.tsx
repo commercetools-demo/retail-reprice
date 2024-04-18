@@ -22,7 +22,7 @@ const CollapsableStoreTable: React.FC<Props> = ({
 }) => {
   return (
     <CollapsiblePanel header={header} className={styles.body}>
-      {showSettings && !!tag && <TagSettings tag={tag} />}
+      {/* {showSettings && !!tag && <TagSettings tag={tag} />} */}
       <StoreTable items={stores} redirectUrl={redirectUrl} />
     </CollapsiblePanel>
   );
