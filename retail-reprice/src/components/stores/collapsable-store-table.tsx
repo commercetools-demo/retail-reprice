@@ -11,6 +11,7 @@ type Props = {
   redirectUrl?: string;
   showSettings?: boolean;
   tag?: string;
+  isDefaultClosed?: boolean;
 };
 
 const CollapsableStoreTable: React.FC<Props> = ({
@@ -18,10 +19,11 @@ const CollapsableStoreTable: React.FC<Props> = ({
   stores,
   redirectUrl,
   showSettings,
+  isDefaultClosed,
   tag,
 }) => {
   return (
-    <CollapsiblePanel header={header} className={styles.body}>
+    <CollapsiblePanel header={header} className={styles.body} isDefaultClosed={isDefaultClosed} >
       {/* {showSettings && !!tag && <TagSettings tag={tag} />} */}
       <StoreTable items={stores} redirectUrl={redirectUrl} />
     </CollapsiblePanel>

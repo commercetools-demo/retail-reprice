@@ -26,6 +26,7 @@ const NewTag = (props: Props) => {
               label: tag,
               value: tag,
             }))}
+            menuPortalTarget={document.body}
             onChange={(e) =>
               handleSubmit(e.target.value as { label: string; value: string })
             }

@@ -7,7 +7,7 @@ export default defineMessages({
   },
   title: {
     id: 'businessUnits.title',
-    defaultMessage: 'businessUnits list',
+    defaultMessage: 'List of business units',
   },
   demoHint: {
     id: 'businessUnits.demoHint',

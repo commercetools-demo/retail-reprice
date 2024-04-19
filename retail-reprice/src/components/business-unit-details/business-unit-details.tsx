@@ -44,6 +44,7 @@ const BusinessUnitDetails = () => {
           <CollapsableStoreTable
             stores={businessUnit?.stores}
             redirectUrl="stores"
+            isDefaultClosed 
             header={intl.formatMessage(messages.allStores)}
           />
         </TagsProvider>
