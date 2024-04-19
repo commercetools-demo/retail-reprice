@@ -1,12 +1,16 @@
 import { Result } from '../../hooks/use-products';
 import DataTable from '@commercetools-uikit/data-table';
-import { useDataTableSortingState } from '@commercetools-uikit/hooks';
-import { useState } from 'react';
+import {
+  useDataTableSortingState,
+  usePaginationState,
+} from '@commercetools-uikit/hooks';
+import { useEffect, useState } from 'react';
 import DataTableManager, {
   UPDATE_ACTIONS,
 } from '@commercetools-uikit/data-table-manager';
 import CellRenderer from './cell-renderer';
 import { useStoreDetailsContext } from '../../providers/storeDetails/store-details';
+import { Pagination } from '@commercetools-uikit/pagination';
 
 export const initialVisibleColumns = [
   { key: 'name', label: 'Product name' },
@@ -18,7 +22,9 @@ const initialHiddenColumns = [{ key: 'id', label: 'Product ID' }];
 const initialColumnsState = [...initialVisibleColumns, ...initialHiddenColumns];
 
 export const ProductList = () => {
-  const { result } = useStoreDetailsContext();
+  const { result, setPagination } = useStoreDetailsContext();
+
+  const { page, perPage } = usePaginationState();
 
   const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
 
@@ -102,6 +108,10 @@ export const ProductList = () => {
       }
     }
   };
+
+  useEffect(() => {
+    setPagination({ page: page.value, limit: perPage.value });
+  }, [page.value, perPage.value]);
   return (
     <div style={{ width: '100%' }}>
       <DataTableManager
@@ -110,21 +120,31 @@ export const ProductList = () => {
         columnManager={columnManager}
         displaySettings={displaySettings}
       >
-        <DataTable<NonNullable<Result['results']['0']>>
-          isCondensed
-          columns={initialVisibleColumns}
-          rows={result?.results ?? []}
-          itemRenderer={(item, column) => (
-            <CellRenderer
-              item={item}
-              columnKey={column.key}
-              handlePriceChange={handlePriceChange}
-            />
-          )}
-          sortedBy={tableSorting.value.key}
-          sortDirection={tableSorting.value.order}
-          onSortChange={tableSorting.onChange}
-        />
+        <>
+          {' '}
+          <DataTable<NonNullable<Result['results']['0']>>
+            isCondensed
+            columns={initialVisibleColumns}
+            rows={result?.results ?? []}
+            itemRenderer={(item, column) => (
+              <CellRenderer
+                item={item}
+                columnKey={column.key}
+                handlePriceChange={handlePriceChange}
+              />
+            )}
+            sortedBy={tableSorting.value.key}
+            sortDirection={tableSorting.value.order}
+            onSortChange={tableSorting.onChange}
+          />
+          <Pagination
+            page={page.value}
+            onPageChange={page.onChange}
+            perPage={perPage.value}
+            onPerPageChange={perPage.onChange}
+            totalItems={result?.total ?? 0}
+          />
+        </>
       </DataTableManager>
     </div>
   );

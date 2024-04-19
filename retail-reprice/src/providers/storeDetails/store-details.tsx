@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Query, Result, UseProducts } from '../../hooks/use-products';
-import { usePaginationState } from '@commercetools-uikit/hooks';
 
 interface StoreDetailsContextReturn {
   filters: Query;
   result?: Result;
   setFilters: (query: Query) => void;
   updateFilters: (query: Omit<Query, 'storeId'>) => void;
+  setPagination: (payload: { limit: number; page: number }) => void;
 }
 
 const initialData = {
@@ -14,6 +14,7 @@ const initialData = {
   result: {} as Result,
   setFilters: () => {},
   updateFilters: () => null,
+  setPagination: () => null,
 };
 
 const StoreDetailsContext =
@@ -81,7 +82,13 @@ const StoreDetailsProvider = ({
   });
   const [result, setResult] = useState<Result>();
   const { getProducts: getProductsCall } = UseProducts();
-  const { page, perPage } = usePaginationState();
+
+  const [pagination, setPagination] = useState<{ limit: number; page: number }>(
+    {
+      limit: 20,
+      page: 1,
+    }
+  );
 
   const updateFilters = (query: Omit<Query, 'storeId'>) => {
     const newQuery = {
@@ -94,14 +101,14 @@ const StoreDetailsProvider = ({
     setCountryAndCurrency(newQuery);
   };
 
-  const getProducts = async () => {
-    const result = await getProductsCall(filters, perPage.value, page.value);
+  const getProducts = async (limit: number, page: number) => {
+    const result = await getProductsCall(filters, limit, page);
     setResult(result);
   };
 
   useEffect(() => {
-    getProducts();
-  }, [filters, page.value, perPage.value]);
+    getProducts(pagination.limit, pagination.page);
+  }, [filters, pagination.limit, pagination.page]);
 
   return (
     <StoreDetailsContext.Provider
@@ -110,6 +117,7 @@ const StoreDetailsProvider = ({
         result,
         setFilters,
         updateFilters,
+        setPagination,
       }}
     >
       {children}

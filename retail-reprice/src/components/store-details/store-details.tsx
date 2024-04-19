@@ -29,13 +29,6 @@ const StoreDetails = (props: TStoreDetailsProps) => {
     return store?.name
   }, [store]);
 
-  const { page, perPage } = usePaginationState({
-    page: 1,
-    perPage: 20,
-  });
-
-  const { result } = useStoreDetailsContext();
-
   const [areFiltersDisplayed, setAreFiltersDisplayed] = useState(true);
 
   return (
@@ -62,13 +55,6 @@ const StoreDetails = (props: TStoreDetailsProps) => {
             <ProductFilters storeId={params.storeId} />
           </SidebarLayout>
         </Spacings.Inline>
-        <Pagination
-          page={page.value}
-          onPageChange={page.onChange}
-          perPage={perPage.value}
-          onPerPageChange={perPage.onChange}
-          totalItems={result?.total ?? 0}
-        />
       </Spacings.Stack>
     </Spacings.Stack>
   );
