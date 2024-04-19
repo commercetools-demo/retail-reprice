@@ -1,8 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import NumberInput from '@commercetools-uikit/number-input';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import MoneyInput, {
+  TMoneyValue,
+  TValue,
+} from '@commercetools-uikit/money-input';
 import { UseProducts } from '../../hooks/use-products';
 import { TProductProjection } from '../../types/generated/ctp';
 import { useStoreDetailsContext } from '../../providers/storeDetails/store-details';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 
 type Props = {
   product: TProductProjection;
@@ -11,33 +15,51 @@ type Props = {
 };
 
 const PriceEditor: React.FC<Props> = ({ product, currency, onPriceChange }) => {
+  const formRef = useRef<HTMLFormElement>(null);
+
   const { updateProductPrice } = UseProducts();
   const { filters, result } = useStoreDetailsContext();
+  const { dataLocale } = useApplicationContext((context) => ({
+    dataLocale: context.dataLocale,
+  }));
+  const MoneyValueToValue = (money?: TMoneyValue): TValue => {
+    return MoneyInput.parseMoneyValue(
+      money?.centAmount
+        ? money
+        : ({
+            centAmount: 0,
+            currencyCode: currency || 'USD',
+          } as TMoneyValue),
+      dataLocale!
+    );
+  };
 
   const initialPrice = useMemo(() => {
-    return (product.masterVariant.price?.value?.centAmount ?? 0) / 100;
-  }, [product]);
-  const steps = useMemo(() => {
-    return Math.pow(
-      10,
-      (product.masterVariant.price?.value?.fractionDigits ?? 2) * -1
-    );
+    return (
+      (product.masterVariant.price?.value?.centAmount ?? 0) / 100
+    ).toFixed(product.masterVariant.price?.value.fractionDigits ?? 2);
   }, [product]);
 
-  const [value, setValue] = useState<number>(initialPrice);
+  const [money, setMoney] = useState(
+    MoneyValueToValue(product.masterVariant.price?.value as TMoneyValue)
+  );
 
-  const handleStorePrice = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleInputKeyDown = async (e: Event) => {
+    if ((e as KeyboardEvent).key !== 'Enter') {
+      return;
+    }
+
     e.preventDefault();
     const latestProduct = result?.results.find(
       (p) => p.productProjection.id === product.id
     );
     onPriceChange(product.id);
-    if (value !== initialPrice) {
+    if (money?.amount !== initialPrice) {
       await updateProductPrice(
         product.id,
         latestProduct?.productProjection.version!,
         {
-          centAmount: value * 100,
+          centAmount: Number(money?.amount || 0) * 100,
           currencyCode: filters.currency,
         },
         product.masterVariant.sku,
@@ -51,22 +73,49 @@ const PriceEditor: React.FC<Props> = ({ product, currency, onPriceChange }) => {
     }
   };
 
+  const handleChange = (event: any) => {
+    setMoney({ ...money, amount: event.target.value });
+  };
+
   useEffect(() => {
-    setValue((product.masterVariant.price?.value?.centAmount ?? 0) / 100);
-  }, [product.masterVariant.price]);
+    setMoney(
+      MoneyValueToValue(product.masterVariant.price?.value as TMoneyValue)
+    );
+  }, [product.masterVariant.price, currency]);
+
+  useEffect(() => {
+    if (formRef.current) {
+      const wrappedInput = formRef.current.querySelector(
+        'input[data-price-editor]'
+      );
+      if (wrappedInput) {
+        wrappedInput.addEventListener('keydown', handleInputKeyDown);
+      }
+    }
+    return () => {
+      if (formRef.current) {
+        const wrappedInput = formRef.current.querySelector(
+          'input[data-price-editor]'
+        );
+        if (wrappedInput) {
+          wrappedInput.removeEventListener('keydown', handleInputKeyDown);
+        }
+      }
+    };
+  }, [money, currency]);
 
   return (
-    <form onSubmit={handleStorePrice}>
-      <NumberInput
-        isDisabled={!currency}
-        horizontalConstraint={5}
-        value={value}
-        step={steps}
-        data-price-editor={product.id}
-        onChange={(e) => {
-          setValue(Number(e.target.value));
-        }}
-      />
+    <form ref={formRef}>
+      {money && currency && (
+        <MoneyInput
+          isDisabled={!currency}
+          horizontalConstraint={5}
+          value={money}
+          currencies={[currency]}
+          data-price-editor={product.id}
+          onChange={handleChange}
+        />
+      )}
     </form>
   );
 };
