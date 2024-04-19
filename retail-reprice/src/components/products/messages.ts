@@ -23,6 +23,6 @@ export default defineMessages({
   },
   title: {
     id: 'filters.title',
-    defaultMessage: 'Filter products',
+    defaultMessage: 'Filter prices',
   },
 });

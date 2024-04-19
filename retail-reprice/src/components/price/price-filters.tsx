@@ -10,7 +10,7 @@ import Text from '@commercetools-uikit/text';
 import SelectInput from '@commercetools-uikit/select-input';
 import Constraints from '@commercetools-uikit/constraints';
 
-import messages from './messages';
+import messages from '../products/messages';
 import { useIntl } from 'react-intl';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { useStoreDetailsContext } from '../../providers/storeDetails/store-details';
@@ -18,7 +18,7 @@ type Props = {
   storeId: string;
 };
 
-const ProductFilters: React.FC<Props> = ({ storeId }) => {
+const PriceFilters: React.FC<Props> = ({ storeId }) => {
   const { updateFilters, filters: defaultFilters } = useStoreDetailsContext();
   const { project, dataLocale } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
@@ -37,7 +37,7 @@ const ProductFilters: React.FC<Props> = ({ storeId }) => {
   const [filters, setFilters] = useState({
     productSelection: false,
     priceChannel: true,
-    noAnyChannelPrice: false,
+    noAnyChannelPrice: true,
     country: defaultCountry,
     currency: defaultFilters.currency || '',
   });
@@ -175,4 +175,4 @@ const ProductFilters: React.FC<Props> = ({ storeId }) => {
   );
 };
 
-export default ProductFilters;
+export default PriceFilters;

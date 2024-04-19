@@ -10,7 +10,6 @@ import messages from './messages';
 import TaggedStoresTables from '../stores/tagged-store-tables';
 import CollapsableStoreTable from '../stores/collapsable-store-table';
 
-
 const BusinessUnitDetails = () => {
   const intl = useIntl();
   const params = useParams<{ id: string }>();
@@ -44,7 +43,7 @@ const BusinessUnitDetails = () => {
           <CollapsableStoreTable
             stores={businessUnit?.stores}
             redirectUrl="stores"
-            isDefaultClosed 
+            isDefaultClosed
             header={intl.formatMessage(messages.allStores)}
           />
         </TagsProvider>

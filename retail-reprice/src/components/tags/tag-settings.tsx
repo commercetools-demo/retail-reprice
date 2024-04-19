@@ -14,7 +14,7 @@ type Props = {
 
 const TagSettings: React.FC<Props> = ({ tag }) => {
   const intl = useIntl();
-  const {renameTag} = useTagsContext();
+  const { renameTag } = useTagsContext();
 
   const [tagName, setTagName] = useState(tag);
   return (

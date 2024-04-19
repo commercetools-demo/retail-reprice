@@ -42,10 +42,14 @@ export const useTags = () => {
           },
         }),
       },
-    }
-  }
+    };
+  };
 
-  const getRemoveTagDraft = (tag: string, storeId: string, currentTag: TTag) => {
+  const getRemoveTagDraft = (
+    tag: string,
+    storeId: string,
+    currentTag: TTag
+  ) => {
     return {
       draft: {
         container: CUSTOM_OBJECT_CONTAINER,
@@ -58,10 +62,14 @@ export const useTags = () => {
           },
         }),
       },
-    }
-  }
+    };
+  };
 
-  const getRenameTagDraft = (oldName: string, newName: string, currentTag: TTag) => {
+  const getRenameTagDraft = (
+    oldName: string,
+    newName: string,
+    currentTag: TTag
+  ) => {
     return {
       draft: {
         container: CUSTOM_OBJECT_CONTAINER,
@@ -72,8 +80,8 @@ export const useTags = () => {
           [oldName]: undefined,
         }),
       },
-    }
-  }
+    };
+  };
 
   return {
     getRenameTagDraft,

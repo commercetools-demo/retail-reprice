@@ -11,7 +11,10 @@ const StoreDetailsWrapper = (props: TStoreDetailsProps) => {
 
   return (
     <StoreDetailsProvider storeId={params.storeId}>
-      <StoreDetails linkToWelcome={props.linkToWelcome} storeId={params.storeId}/>
+      <StoreDetails
+        linkToWelcome={props.linkToWelcome}
+        storeId={params.storeId}
+      />
     </StoreDetailsProvider>
   );
 };

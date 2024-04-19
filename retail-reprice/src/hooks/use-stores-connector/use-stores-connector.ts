@@ -49,7 +49,7 @@ type TUseStoreDetailsFetcher = (storeId: string) => {
 };
 
 export const useStoreDetailsFetcher: TUseStoreDetailsFetcher = (storeId) => {
-    const { dataLocale } = useApplicationContext((context) => ({
+  const { dataLocale } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
   }));
   const { data, error, loading } = useMcQuery<

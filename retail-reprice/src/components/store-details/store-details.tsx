@@ -9,7 +9,7 @@ import messages from './messages';
 import { useMemo, useState } from 'react';
 import { Pagination } from '@commercetools-uikit/pagination';
 import { ProductList } from '../products/products-list';
-import ProductFilters from '../products/product-filters';
+import PriceFilters from '../price/price-filters';
 import SidebarLayout from '../sidebar-layout';
 import { useStoreDetailsContext } from '../../providers/storeDetails/store-details';
 import { useStoreDetailsFetcher } from '../../hooks/use-stores-connector';
@@ -26,7 +26,7 @@ const StoreDetails = (props: TStoreDetailsProps) => {
   const { store } = useStoreDetailsFetcher(props.storeId);
 
   const name = useMemo(() => {
-    return store?.name
+    return store?.name;
   }, [store]);
 
   const [areFiltersDisplayed, setAreFiltersDisplayed] = useState(true);
@@ -52,7 +52,7 @@ const StoreDetails = (props: TStoreDetailsProps) => {
             hideHeader
             onClose={() => setAreFiltersDisplayed(false)}
           >
-            <ProductFilters storeId={params.storeId} />
+            <PriceFilters storeId={params.storeId} />
           </SidebarLayout>
         </Spacings.Inline>
       </Spacings.Stack>

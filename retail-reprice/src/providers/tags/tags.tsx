@@ -35,7 +35,7 @@ const TagsProvider = ({ children }: React.PropsWithChildren<{}>) => {
   });
   const { execute } = useCustomObjectUpdater();
 
-  const {getAddTagDraft, getRemoveTagDraft, getRenameTagDraft} = useTags();
+  const { getAddTagDraft, getRemoveTagDraft, getRenameTagDraft } = useTags();
 
   const [customObject, setCustomObject] = useState<any>();
 

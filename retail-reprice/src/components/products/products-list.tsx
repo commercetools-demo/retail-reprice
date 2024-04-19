@@ -26,8 +26,6 @@ export const ProductList = () => {
 
   const { page, perPage } = usePaginationState();
 
-  const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
-
   const [tableData, setTableData] = useState({
     columns: initialColumnsState,
     visibleColumnKeys: initialVisibleColumns.map(({ key }) => key),
@@ -133,9 +131,6 @@ export const ProductList = () => {
                 handlePriceChange={handlePriceChange}
               />
             )}
-            sortedBy={tableSorting.value.key}
-            sortDirection={tableSorting.value.order}
-            onSortChange={tableSorting.onChange}
           />
           <Pagination
             page={page.value}
