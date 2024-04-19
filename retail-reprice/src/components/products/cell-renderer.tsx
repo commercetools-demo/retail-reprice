@@ -22,7 +22,7 @@ const CellRenderer: React.FC<Props> = ({
     case 'id':
       return item.productProjection.id;
     case 'name':
-      return item.productProjection.name?.[dataLocale || ''];
+      return item.productProjection.name?.[dataLocale || ''] || 'N/A';
     case 'price':
       return (
         <PriceEditor
