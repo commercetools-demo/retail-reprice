@@ -7,7 +7,6 @@ interface StoreDetailsContextReturn {
   result?: Result;
   setFilters: (query: Query) => void;
   updateFilters: (query: Omit<Query, 'storeId'>) => void;
-  updateProductVersion: (productId: string, version: number) => void;
 }
 
 const initialData = {
@@ -15,11 +14,62 @@ const initialData = {
   result: {} as Result,
   setFilters: () => {},
   updateFilters: () => null,
-  updateProductVersion: () => null,
 };
 
 const StoreDetailsContext =
   React.createContext<StoreDetailsContextReturn>(initialData);
+
+const getCountryAndCurrencyInURLParams = (): Record<string, string> => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const params = {
+    ...(urlParams.get('country') && { country: urlParams.get('country') }),
+    ...(urlParams.get('currency') && { currency: urlParams.get('currency') }),
+  };
+  return params as Record<string, string>;
+};
+
+const getCountryAndCurrencyFromLocalStorage = (): Record<string, string> => {
+  const country = localStorage.getItem('country');
+  const currency = localStorage.getItem('currency');
+  return {
+    ...(country && { country }),
+    ...(currency && { currency }),
+  };
+};
+const getCountryAndCurrency = () => {
+  const urlParams = getCountryAndCurrencyInURLParams();
+  const localStorageParams = getCountryAndCurrencyFromLocalStorage();
+
+  const newLocal = {
+    ...urlParams,
+    ...localStorageParams,
+  };
+  return newLocal;
+};
+const saveCountryAndCurrencyInURLParams = (query: Partial<Query>) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (query.country) {
+    urlParams.set('country', query.country);
+  }
+  if (query.currency) {
+    urlParams.set('currency', query.currency);
+  }
+  window.history.replaceState({}, '', `?${urlParams.toString()}`);
+};
+
+const saveCountryAndCurrencyInLocalStorage = (query: Partial<Query>) => {
+  if (query.country) {
+    localStorage.setItem('country', query.country);
+  }
+  if (query.currency) {
+    localStorage.setItem('currency', query.currency);
+  }
+};
+
+const setCountryAndCurrency = (query: Query) => {
+  saveCountryAndCurrencyInURLParams(query);
+  saveCountryAndCurrencyInLocalStorage(query);
+};
 
 const StoreDetailsProvider = ({
   children,
@@ -27,37 +77,21 @@ const StoreDetailsProvider = ({
 }: React.PropsWithChildren<{ storeId: string }>) => {
   const [filters, setFilters] = useState<Query>({
     storeId,
+    ...getCountryAndCurrency(),
   });
   const [result, setResult] = useState<Result>();
   const { getProducts: getProductsCall } = UseProducts();
   const { page, perPage } = usePaginationState();
 
   const updateFilters = (query: Omit<Query, 'storeId'>) => {
-    setFilters({
+    const newQuery = {
+      ...getCountryAndCurrency(),
       storeId,
       ...query,
-    });
-  };
+    };
+    setFilters(newQuery);
 
-  const updateProductVersion = (productId: string, version: number) => {
-    if (result) {
-      const newResult = {
-        ...result,
-        results: result.results.map((pp) => {
-          if (pp.productProjection.id === productId) {
-            return {
-              ...pp,
-              productProjection: {
-                ...pp.productProjection,
-                version,
-              },
-            };
-          }
-          return pp;
-        }),
-      };
-      setResult(newResult);
-    }
+    setCountryAndCurrency(newQuery);
   };
 
   const getProducts = async () => {
@@ -76,7 +110,6 @@ const StoreDetailsProvider = ({
         result,
         setFilters,
         updateFilters,
-        updateProductVersion,
       }}
     >
       {children}

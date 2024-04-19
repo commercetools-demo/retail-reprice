@@ -19,13 +19,14 @@ type Props = {
 };
 
 const ProductFilters: React.FC<Props> = ({ storeId }) => {
-  const { updateFilters } = useStoreDetailsContext();
+  const { updateFilters, filters: defaultFilters } = useStoreDetailsContext();
   const { project, dataLocale } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
     project: context.project,
   }));
 
   const defaultCountry = useMemo(() => {
+    if (defaultFilters.country) return defaultFilters.country;
     const localeSplitted = dataLocale?.split('-') || [];
     return localeSplitted.length > 1 ? localeSplitted[1] : '';
   }, [dataLocale]);
@@ -38,7 +39,7 @@ const ProductFilters: React.FC<Props> = ({ storeId }) => {
     priceChannel: true,
     noAnyChannelPrice: false,
     country: defaultCountry,
-    currency: '',
+    currency: defaultFilters.currency || '',
   });
 
   useEffect(() => {
