@@ -15,7 +15,7 @@ export default defineMessages({
   },
   priceChannel: {
     id: 'filters.priceChannel',
-    defaultMessage: "Use store's distribution channels",
+    defaultMessage: "Use store's distribution channels: {distributionChannels}",
   },
   noAny: {
     id: 'filters.noAny',

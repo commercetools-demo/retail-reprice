@@ -74,6 +74,7 @@ const Stores = (props: TStoresProps) => {
             <CollapsableStoreTable
               stores={storesPaginatedResult.results}
               redirectUrl=""
+              isDefaultClosed
               header={intl.formatMessage(messages.allStores)}
             />
 

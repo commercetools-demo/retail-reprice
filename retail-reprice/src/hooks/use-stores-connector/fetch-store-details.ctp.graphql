@@ -1,4 +1,12 @@
-query FetchStoreDetails($storeId: String!) {
+fragment ChannelName on Channel {
+  name(locale: $locale) 
+}
+
+fragment StoreName on Store {
+  name(locale: $locale) 
+}
+
+query FetchStoreDetails($storeId: String!, $locale: Locale) {
   store(id: $storeId) {
     id
     version
@@ -23,11 +31,13 @@ query FetchStoreDetails($storeId: String!) {
       id
       key
       roles
+      ...ChannelName
       nameAllLocales {
         locale
         value
       }
     }
+    ...StoreName
     nameAllLocales {
       locale
       value

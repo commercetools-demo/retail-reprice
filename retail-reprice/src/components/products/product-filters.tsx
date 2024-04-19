@@ -61,9 +61,6 @@ const ProductFilters: React.FC<Props> = ({ storeId }) => {
   }, [filters, store]);
 
   useEffect(() => {
-    console.log('data', data);
-    console.log('updateFilters', data);
-
     updateFilters(data);
   }, [data]);
 
@@ -136,7 +133,13 @@ const ProductFilters: React.FC<Props> = ({ storeId }) => {
           </Constraints.Horizontal>
           <Constraints.Horizontal max={16}>
             <Spacings.Inline>
-              <FieldLabel title={formatMessage(messages.priceChannel)} />
+              <FieldLabel
+                title={formatMessage(messages.priceChannel, {
+                  distributionChannels: store?.distributionChannels
+                    ?.map((channel) => channel.key)
+                    .join(', '),
+                })}
+              />
               <ToggleInput
                 size="small"
                 isChecked={filters.priceChannel}

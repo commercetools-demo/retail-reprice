@@ -14,6 +14,7 @@ import {
   TFetchStoresQuery,
   TFetchStoresQueryVariables,
 } from './types';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 
 export const useStoresFetcher: TUseStoresFetcher = ({
   page,
@@ -48,12 +49,16 @@ type TUseStoreDetailsFetcher = (storeId: string) => {
 };
 
 export const useStoreDetailsFetcher: TUseStoreDetailsFetcher = (storeId) => {
+    const { dataLocale } = useApplicationContext((context) => ({
+    dataLocale: context.dataLocale,
+  }));
   const { data, error, loading } = useMcQuery<
     TFetchStoreDetailsQuery,
     TFetchStoreDetailsQueryVariables
   >(FetchStoreDetailsQuery, {
     variables: {
       storeId,
+      ...(dataLocale && { locale: dataLocale }),
     },
     context: {
       target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,

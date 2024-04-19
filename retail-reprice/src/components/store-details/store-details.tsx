@@ -13,7 +13,6 @@ import ProductFilters from '../products/product-filters';
 import SidebarLayout from '../sidebar-layout';
 import { useStoreDetailsContext } from '../../providers/storeDetails/store-details';
 import { useStoreDetailsFetcher } from '../../hooks/use-stores-connector';
-import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 
 type TStoreDetailsProps = {
   linkToWelcome: string;
@@ -25,13 +24,9 @@ const StoreDetails = (props: TStoreDetailsProps) => {
   const params = useParams<{ storeId: string }>();
 
   const { store } = useStoreDetailsFetcher(props.storeId);
-  const { dataLocale } = useApplicationContext((context) => ({
-    dataLocale: context.dataLocale,
-  }));
 
   const name = useMemo(() => {
-    return store?.nameAllLocales?.find((locale) => locale.locale === dataLocale)
-      ?.value;
+    return store?.name
   }, [store]);
 
   const { page, perPage } = usePaginationState({
