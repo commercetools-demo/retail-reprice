@@ -66,10 +66,10 @@ const ProductFilters: React.FC<Props> = ({ storeId }) => {
 
   useEffect(() => {
     if (store) {
-      setData({
-        ...data,
+      setData((newData) => ({
+        ...newData,
         storeKey: store.key,
-      });
+      }));
     }
   }, [store]);
 

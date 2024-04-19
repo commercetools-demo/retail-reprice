@@ -21,6 +21,8 @@ const CellRenderer: React.FC<Props> = ({
   switch (columnKey) {
     case 'id':
       return item.productProjection.id;
+    case 'priceMode':
+      return item.productProjection.priceMode || 'Embedded';
     case 'name':
       return item.productProjection.name?.[dataLocale || ''] || 'N/A';
     case 'price':

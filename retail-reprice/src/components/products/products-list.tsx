@@ -10,7 +10,7 @@ import { useStoreDetailsContext } from '../../providers/storeDetails/store-detai
 
 export const initialVisibleColumns = [
   { key: 'name', label: 'Product name' },
-
+  { key: 'priceMode', label: 'Price Mode' },
   { key: 'price', label: 'Product Price' },
 ];
 const initialHiddenColumns = [{ key: 'id', label: 'Product ID' }];

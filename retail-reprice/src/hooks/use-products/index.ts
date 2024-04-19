@@ -102,7 +102,10 @@ export const UseProducts = () => {
   ): Promise<Result> => {
     const offset = (page - 1) * limit;
 
-    const productProjectionParameters = projectionBuilder(requestQuery, context.dataLocale);
+    const productProjectionParameters = projectionBuilder(
+      requestQuery,
+      context.dataLocale
+    );
     const query = requestBuilder(requestQuery);
     const result = await dispatchProductSearch(
       actions.post({
@@ -156,6 +159,35 @@ export const UseProducts = () => {
     );
   };
 
+  const createProductStandalonePrice = async (
+    newPrice: Money,
+    sku?: string | null,
+    country?: string,
+    channel?: string
+  ): Promise<StandalonePrice> => {
+    return dispatchStandalonePriceUpdate(
+      actions.post({
+        mcApiProxyTarget: MC_API_PROXY_TARGETS.COMMERCETOOLS_PLATFORM,
+        uri: buildUrlWithParams(
+          `/${context?.project?.key}/standalone-prices`,
+          {}
+        ),
+        payload: {
+          key: `${sku}-${country}-${channel}`,
+          sku,
+          country,
+          ...(channel && {
+            channel: {
+              id: channel,
+              typeId: 'channel',
+            },
+          }),
+          value: newPrice,
+        },
+      })
+    );
+  };
+
   const updateProductPrice = async (
     productId: string,
     version: number,
@@ -167,8 +199,22 @@ export const UseProducts = () => {
     oldPrice?: Money,
     oldPriceId?: string | null
   ): Promise<Product | StandalonePrice> => {
-    if (priceMode === 'Standalone') {
+    console.log(
+      productId,
+      version,
+      newPrice,
+      sku,
+      country,
+      channel,
+      priceMode,
+      oldPrice,
+      oldPriceId
+    );
+
+    if (priceMode === 'Standalone' && oldPriceId) {
       return updateProductStandalonePrice(newPrice, oldPriceId);
+    } else if (priceMode === 'Standalone') {
+      return createProductStandalonePrice(newPrice, sku, country, channel);
     }
     let action = {
       action: 'addPrice',
@@ -179,10 +225,12 @@ export const UseProducts = () => {
           centAmount: newPrice.centAmount,
         },
         country,
-        channel: {
-          id: channel,
-          typeId: 'channel',
-        },
+        ...(channel && {
+          channel: {
+            id: channel,
+            typeId: 'channel',
+          },
+        }),
       },
       staged: false,
     };
