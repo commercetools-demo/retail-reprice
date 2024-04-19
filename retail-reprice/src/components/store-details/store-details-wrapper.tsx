@@ -8,11 +8,10 @@ type TStoreDetailsProps = {
 
 const StoreDetailsWrapper = (props: TStoreDetailsProps) => {
   const params = useParams<{ storeId: string }>();
-  console.log('params', params.storeId);
 
   return (
     <StoreDetailsProvider storeId={params.storeId}>
-      <StoreDetails linkToWelcome={props.linkToWelcome} />
+      <StoreDetails linkToWelcome={props.linkToWelcome} storeId={params.storeId}/>
     </StoreDetailsProvider>
   );
 };

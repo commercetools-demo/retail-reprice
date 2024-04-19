@@ -7,7 +7,7 @@ export default defineMessages({
   },
   title: {
     id: 'storeDetails.title',
-    defaultMessage: 'storeDetails list',
+    defaultMessage: 'Products in {storeName}',
   },
   demoHint: {
     id: 'storeDetails.demoHint',

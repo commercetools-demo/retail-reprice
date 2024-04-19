@@ -6,21 +6,33 @@ import FlatButton from '@commercetools-uikit/flat-button';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
 import messages from './messages';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pagination } from '@commercetools-uikit/pagination';
 import { ProductList } from '../products/products-list';
 import ProductFilters from '../products/product-filters';
-import IconButton from '@commercetools-uikit/icon-button';
 import SidebarLayout from '../sidebar-layout';
 import { useStoreDetailsContext } from '../../providers/storeDetails/store-details';
+import { useStoreDetailsFetcher } from '../../hooks/use-stores-connector';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 
 type TStoreDetailsProps = {
   linkToWelcome: string;
+  storeId: string;
 };
 
 const StoreDetails = (props: TStoreDetailsProps) => {
   const intl = useIntl();
   const params = useParams<{ storeId: string }>();
+
+  const { store } = useStoreDetailsFetcher(props.storeId);
+  const { dataLocale } = useApplicationContext((context) => ({
+    dataLocale: context.dataLocale,
+  }));
+
+  const name = useMemo(() => {
+    return store?.nameAllLocales?.find((locale) => locale.locale === dataLocale)
+      ?.value;
+  }, [store]);
 
   const { page, perPage } = usePaginationState({
     page: 1,
@@ -40,14 +52,11 @@ const StoreDetails = (props: TStoreDetailsProps) => {
           label={intl.formatMessage(messages.backToWelcome)}
           icon={<BackIcon />}
         />
-        <Text.Headline as="h2" intlMessage={messages.title} />
+        <Text.Headline as="h2">
+          {intl.formatMessage(messages.title, { storeName: name })}
+        </Text.Headline>
       </Spacings.Stack>
       <Spacings.Stack scale="xs">
-        <IconButton
-          label="Filters"
-          icon={<FilterIcon />}
-          onClick={() => setAreFiltersDisplayed(!areFiltersDisplayed)}
-        />
         <Spacings.Inline alignItems="stretch">
           <ProductList />
           <SidebarLayout
