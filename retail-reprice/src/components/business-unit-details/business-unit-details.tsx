@@ -9,6 +9,7 @@ import TagsProvider from '../../providers/tags/tags';
 import messages from './messages';
 import TaggedStoresTables from '../stores/tagged-store-tables';
 import CollapsableStoreTable from '../stores/collapsable-store-table';
+import Map from '../map';
 
 const BusinessUnitDetails = () => {
   const intl = useIntl();
@@ -35,6 +36,10 @@ const BusinessUnitDetails = () => {
         </Text.Headline>
       </Spacings.Stack>
       <Spacings.Stack scale="xs">
+        <div style={{ width: '500px', height: '300px' }}>
+          <Map stores={businessUnit?.stores}></Map>
+        </div>
+
         <TagsProvider>
           <TaggedStoresTables
             items={businessUnit?.stores}

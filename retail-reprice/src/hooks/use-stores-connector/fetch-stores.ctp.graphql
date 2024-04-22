@@ -9,6 +9,20 @@ query FetchStores($limit: Int!, $offset: Int!, $sort: [String!]) {
       countries {
         code
       }
+      distributionChannels {
+        geoLocation {
+          ... on Point {
+            coordinates
+          }
+        }
+      }
+      supplyChannels {
+        geoLocation {
+          ... on Point {
+            coordinates
+          }
+        }
+      }
       custom {
         customFieldsRaw {
           name
