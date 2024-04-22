@@ -7,12 +7,18 @@ import Stores from './components/stores';
 import BusinessUnits from './components/business-units';
 import BusinessUnitDetails from './components/business-unit-details';
 import StoreDetails from './components/store-details';
+import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 
 type ApplicationRoutesProps = {
   children?: ReactNode;
 };
 const ApplicationRoutes = (_props: ApplicationRoutesProps) => {
   const match = useRouteMatch();
+
+  const { googleMapApiKey } = useApplicationContext<{ googleMapApiKey: string }>(
+    (context: any) => context.environment
+  );
 
   /**
    * When using routes, there is a good chance that you might want to
@@ -26,32 +32,34 @@ const ApplicationRoutes = (_props: ApplicationRoutesProps) => {
    */
 
   return (
-    <Spacings.Inset scale="l">
-      <Switch>
-        <Route path={`${match.path}/channels`}>
-          <Channels linkToWelcome={match.url} />
-        </Route>
-        <Route path={`${match.path}/stores/:storeId`}>
-          <StoreDetails linkToWelcome={match.url} />
-        </Route>
-        <Route path={`${match.path}/stores`}>
-          <Stores linkToWelcome={match.url} />
-        </Route>
-        <Route path={`${match.path}/business-units/:id/stores/:storeId`}>
-          <StoreDetails linkToWelcome={match.url} />
-        </Route>
-        <Route path={`${match.path}/business-units/:id`}>
-          <BusinessUnitDetails />
-        </Route>
-        <Route path={`${match.path}/business-units`}>
-          <BusinessUnits linkToWelcome={match.url} />
-        </Route>
+    <APIProvider apiKey={googleMapApiKey}>
+      <Spacings.Inset scale="l">
+        <Switch>
+          <Route path={`${match.path}/channels`}>
+            <Channels linkToWelcome={match.url} />
+          </Route>
+          <Route path={`${match.path}/stores/:storeId`}>
+            <StoreDetails linkToWelcome={match.url} />
+          </Route>
+          <Route path={`${match.path}/stores`}>
+            <Stores linkToWelcome={match.url} />
+          </Route>
+          <Route path={`${match.path}/business-units/:id/stores/:storeId`}>
+            <StoreDetails linkToWelcome={match.url} />
+          </Route>
+          <Route path={`${match.path}/business-units/:id`}>
+            <BusinessUnitDetails />
+          </Route>
+          <Route path={`${match.path}/business-units`}>
+            <BusinessUnits linkToWelcome={match.url} />
+          </Route>
 
-        <Route>
-          <Welcome />
-        </Route>
-      </Switch>
-    </Spacings.Inset>
+          <Route>
+            <Welcome />
+          </Route>
+        </Switch>
+      </Spacings.Inset>
+    </APIProvider>
   );
 };
 ApplicationRoutes.displayName = 'ApplicationRoutes';

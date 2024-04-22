@@ -1,4 +1,12 @@
-query FetchBusinessUnitDetails($businessUnitId: String!) {
+fragment StoreName on Store {
+  name(locale: $locale)
+}
+
+fragment ChannelName on Channel {
+  name(locale: $locale)
+}
+
+query FetchBusinessUnitDetails($businessUnitId: String!, $locale: Locale) {
   businessUnit(id: $businessUnitId) {
     id
     version
@@ -13,6 +21,7 @@ query FetchBusinessUnitDetails($businessUnitId: String!) {
     stores {
       id
       key
+      ...StoreName
       nameAllLocales {
         locale
         value
@@ -24,6 +33,24 @@ query FetchBusinessUnitDetails($businessUnitId: String!) {
         customFieldsRaw {
           name
           value
+        }
+      }
+      distributionChannels {
+        id
+        ...ChannelName
+        geoLocation {
+          ... on Point {
+            coordinates
+          }
+        }
+      }
+      supplyChannels {
+        id
+        ...ChannelName
+        geoLocation {
+          ... on Point {
+            coordinates
+          }
         }
       }
       productSelections {

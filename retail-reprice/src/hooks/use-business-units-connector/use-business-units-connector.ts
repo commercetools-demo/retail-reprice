@@ -12,9 +12,9 @@ import {
   TFetchBusinessUnitDetailsQueryVariables,
   TFetchBusinessUnitsQuery,
   TFetchBusinessUnitsQueryVariables,
-  TBusinessUnit,
   TBusinessUnitDetail,
 } from './types';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 
 export const useBusinessUnitsFetcher: TUseBusinessUnitsFetcher = ({
   page,
@@ -51,12 +51,16 @@ type TUseBusinessUnitDetailsFetcher = (businessUnitId: string) => {
 export const useBusinessUnitDetailsFetcher: TUseBusinessUnitDetailsFetcher = (
   businessUnitId
 ) => {
+  const { dataLocale } = useApplicationContext((context) => ({
+    dataLocale: context.dataLocale,
+  }));
   const { data, error, loading } = useMcQuery<
     TFetchBusinessUnitDetailsQuery,
     TFetchBusinessUnitDetailsQueryVariables
   >(FetchBusinessUnitDetailsQuery, {
     variables: {
       businessUnitId,
+      ...(dataLocale && { locale: dataLocale }),
     },
     context: {
       target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
