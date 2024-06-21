@@ -1,18 +1,19 @@
 deployAs:
   - name: retail-reprice
     applicationType: merchant-center-custom-application
-    endpoint: /
     configuration:
       standardConfiguration:
-        - key: APPLICATION_ID
+        - key: CUSTOM_APPLICATION_ID
           description: The Custom Application ID
           required: true
-        - key: APPLICATION_URL
-          description: custom app production app URL
+        - key: ENTRY_POINT_URI_PATH
+          description: The Application entry point URI path
+          required: true
+          default: 'retail-reprice'
+        - key: INITIAL_PROJECT_KEY
+          description: development project key
           required: true
         - key: CLOUD_IDENTIFIER
           description: one of the following gcp-us, gcp-eu, aws-us, aws-eu
           required: true
-        - key: INITIAL_PROJECT_KEY
-          description: development project key
-          required: false
+          default: 'gcp-eu'
