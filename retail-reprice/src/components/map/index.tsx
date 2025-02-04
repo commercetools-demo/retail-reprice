@@ -62,10 +62,7 @@ const Map: React.FC<Props> = ({ stores }) => {
       mapId={'mapbox.light-5'}
     >
       {marks?.map((mark) => (
-        <MarkerWithInfowindow
-          key={mark.id}
-          mark={mark}
-        />
+        <MarkerWithInfowindow key={mark.id} mark={mark} />
       ))}
     </GoogleMap>
   );

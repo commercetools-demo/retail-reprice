@@ -8,6 +8,7 @@ import { useApplicationContext } from '@commercetools-frontend/application-shell
 import { TProductProjection } from '../../types/generated/ctp';
 import { projectionBuilder, requestBuilder } from '../../utils/query';
 import { Money, Product, StandalonePrice } from '../../types';
+import { buildUrlWithParams } from '../../utils/url';
 
 export interface Result {
   total: number;
@@ -27,26 +28,6 @@ export interface Query {
   productSelections?: string[];
   distributionChannels?: string[];
   noAnyChannelPrice?: boolean;
-}
-
-function buildUrlWithParams(
-  baseUrl: string,
-  options: Record<string, string | string[]>
-) {
-  const queryParams = new URLSearchParams();
-  if (!options) {
-    return baseUrl;
-  }
-
-  for (const [key, value] of Object.entries(options)) {
-    if (Array.isArray(value)) {
-      value.forEach((item) => queryParams.append(key, item));
-    } else {
-      queryParams.append(key, value);
-    }
-  }
-
-  return `${baseUrl}?${queryParams}`;
 }
 
 const getPrice = (

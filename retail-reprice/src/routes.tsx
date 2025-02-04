@@ -16,9 +16,9 @@ type ApplicationRoutesProps = {
 const ApplicationRoutes = (_props: ApplicationRoutesProps) => {
   const match = useRouteMatch();
 
-  const { googleMapApiKey } = useApplicationContext<{ googleMapApiKey: string }>(
-    (context: any) => context.environment
-  );
+  const { googleMapApiKey } = useApplicationContext<{
+    googleMapApiKey: string;
+  }>((context: any) => context.environment);
 
   /**
    * When using routes, there is a good chance that you might want to
